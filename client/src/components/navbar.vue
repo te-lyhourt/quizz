@@ -3,6 +3,7 @@
     <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="Home page.html">
           Quizz!
+          <i class="fas fa-pen"></i>
         </a>
       <button
         class="navbar-toggler"
@@ -56,11 +57,12 @@ export default {
 </script>
 
 <style scoped>
+
     @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css");
     @import url("https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.css");
-    @import url("https://use.fontawesome.com/releases/v5.14.0/css/all.css");
-    @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-    @import url("https://fonts.googleapis.com/css2?family=Concert+One&display=swap");
+
+    
+
 
     .navbar
     {
@@ -73,8 +75,12 @@ export default {
         color: white;
         margin-left: 20px;
     }
+    
     .navbar-brand:hover{
-        background: linear-gradient(to right,#feac5e,#c779d0,#4bc0c8 100%)!important;;
+        color: white;
+        text-shadow: 0 0 10px #03bcf4,
+        0 0 20px #03bcf4,
+        0 0 40px #03bcf4 
     }
     .navbar-nav
     {
@@ -90,17 +96,28 @@ export default {
     .nav-link.need-help
     {
         margin-top: 5px;
-        color: #989898;
+        color:white;
     }
     .nav-link.need-help:hover
     {
-        color:white;
+        color: white;
+        text-shadow: 0 0 10px #03bcf4,
+        0 0 20px #03bcf4,
+        0 0 40px #03bcf4 
     }
     .btn.button-text{
         color: white;
+        
     }
+    .btn.button-text:hover{
+        text-shadow: 0 0 10px #03bcf4,
+        0 0 20px #03bcf4,
+        0 0 40px #03bcf4 
+    }
+
     .navbar-toggler{
         background: white;
+
     }
 
 </style>
