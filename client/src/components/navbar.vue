@@ -36,34 +36,14 @@
 <script>
 
 export default {
-    mounted() {
-        //plugin bootstrap js 
-        const plugin = document.createElement("script");
-        plugin.setAttribute(
-            "src",
-            "//code.jquery.com/jquery-3.5.1.slim.min.js"
-        );
-        plugin.async = true;
-        document.head.appendChild(plugin);
-        const plugin1 = document.createElement("script");
-        plugin1.setAttribute(
-            "src",
-            "//cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        );
-        plugin1.async = true;
-        document.head.appendChild(plugin1);
-    },
+    components:{
+        
+    }
 };
 </script>
 
 <style scoped>
-
-    @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css");
-    @import url("https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.css");
-
     
-
-
     .navbar
     {
         padding: 20px 10px;
@@ -73,7 +53,7 @@ export default {
         font-size: 2rem;
         font-weight: 700;
         color: white;
-        margin-left: 20px;
+        margin-left: 40px;
     }
     
     .navbar-brand:hover{
@@ -119,5 +99,6 @@ export default {
         background: white;
 
     }
-
+    @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css");
+    @import url("https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.css");
 </style>
