@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const postController = require('../controllers/quizController')
+const postController = require('../controllers/app_Controller')
 const multer = require('multer');
 const { product } = require('../models/quiz');
 var ObjectId = require('mongodb').ObjectID;
