@@ -50,7 +50,7 @@
           <br />
           <p>Confirm Password</p>
             <div class="error">
-                <span v-if="checkPasswrod" >passowrd and confirm password should be the same</span>
+                <span v-if="checkPasswrod" >{{errorMessage}}</span>
             </div>
           <input
             
@@ -98,6 +98,7 @@ export default {
             email:'',
             password:'',
             confirmPass:'',
+            errorMessage:'',
             termChecked : false
         }
     },
@@ -111,6 +112,9 @@ export default {
         },
         checking(){
             this.termChecked = !this.termChecked
+        },
+        wrongPassword(){
+          this.errorMessage = 'passowrd and confirm password should be the same'
         }
     },
     components:{
@@ -132,11 +136,11 @@ export default {
         },
         checkPasswrod(){
             if(this.password==this.confirmPass){
-                return false
+              this.wrongPassword()
+              return false
             }
             else{
-                
-                return true
+              return true
             } 
         }
     }
