@@ -13,9 +13,9 @@
 
         <form action="http://localhost:3000/signUp" method="POST">
           <p>Username</p>
-          <input 
-            required="required" 
-            pattern="[A-Za-z0-9]{4,20}" 
+          <input
+            required="required"
+            pattern="[A-Za-z0-9]{4,20}"
             title="Username should be 4 to 20 english letter or number "
             class="long-box"
             type="text"
@@ -25,9 +25,9 @@
           />
           <br />
           <p class="email">Email address</p>
-          <!-- <% if(email) {%>
-          <span style="color: red;"><%= message %></span>
-          <% } %> -->
+
+          <span style="color: red;" v-if="errorEmail">{{message+'error'}}</span>
+
           <input
             required="required"
             class="long-box"
@@ -49,11 +49,10 @@
           />
           <br />
           <p>Confirm Password</p>
-            <div class="error">
-                <span v-if="checkPasswrod" >{{errorMessage}}</span>
-            </div>
+          <div class="error">
+            <span v-if="checkPasswrod">{{ errorMessage }}</span>
+          </div>
           <input
-            
             required="required"
             class="long-box"
             type="password"
@@ -64,17 +63,21 @@
           />
           <br />
           <div class="checkbox">
-            <input required="required" type="checkbox" id="term" name="term" @change="checking()"/>
+            <input
+              required="required"
+              type="checkbox"
+              id="term"
+              name="term"
+              v-model="checked"
+            />
 
             I accept Terms and Conditions <br />
-
           </div>
           <button
             class="long-box btn btn-primary"
             type="submit"
             id="submit"
-            :disabled = !ableSubmit
-            @click="ableSubmit"
+            :disabled="!ableSubmit"
           >
             Sign Up
           </button>
@@ -90,60 +93,55 @@
   </div>
 </template>
 <script>
-import brand from '@/components/brand.vue'
+import brand from "@/components/brand.vue";
 export default {
-    data() {
-        return {
-            userName:'',
-            email:'',
-            password:'',
-            confirmPass:'',
-            errorMessage:'',
-            termChecked : false
-        }
+  data() {
+    return {
+      userName: "",
+      email: "",
+      password: "",
+      confirmPass: "",
+      errorMessage: "",
+      checked: false,
+    };
+  },
+  methods: {
+    submitSignUp() {
+      this.$store.dispatch("addUser", {
+        userName: this.userName,
+        userEmail: this.email,
+        password: this.password,
+      });
     },
-    methods: {
-        submitSignUp(){
-            this.$store.dispatch("addUser",{
-                userName : this.userName,
-                userEmail : this.email,
-                password : this.password
-            })
-        },
-        checking(){
-            this.termChecked = !this.termChecked
-        },
-        wrongPassword(){
-          this.errorMessage = 'passowrd and confirm password should be the same'
-        }
+    wrongPassword() {
+      this.errorMessage = "passowrd and confirm password should be the same";
     },
-    components:{
-        brand,
+  },
+  components: {
+    brand,
+  },
+  computed: {
+    ableSubmit() {
+      if (
+        this.userName != "" &&
+        this.email != "" &&
+        this.password != "" &&
+        this.confirmPass != "" &&
+        !this.checkPasswrod &&
+        this.termChecked
+      ) {
+        return true;
+      } else return false;
     },
-    computed:{
-        ableSubmit(){
-            if(this.userName!=''
-                && this.email!=''
-                &&this.password!=''
-                &&this.confirmPass!=''
-                &&!this.checkPasswrod
-                &&this.termChecked
-            ){
-                return true
-            }
-            else return false
-            
-        },
-        checkPasswrod(){
-            if(this.password==this.confirmPass){
-              this.wrongPassword()
-              return false
-            }
-            else{
-              return true
-            } 
-        }
-    }
+    checkPasswrod() {
+      if (this.password == this.confirmPass) {
+        this.wrongPassword();
+        return false;
+      } else {
+        return true;
+      }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -189,11 +187,9 @@ button,
   border: solid black;
   box-shadow: 10px 5px 5px 0 rgb(0, 0, 0, 0.7);
 }
-.btn:hover{
-    color: white;
-    text-shadow: 0 0 10px #03bcf4,
-        0 0 20px #03bcf4,
-        0 0 40px #03bcf4 
+.btn:hover {
+  color: white;
+  text-shadow: 0 0 10px #03bcf4, 0 0 20px #03bcf4, 0 0 40px #03bcf4;
 }
 input {
   border: solid 2px;
@@ -206,10 +202,10 @@ input {
 .heading {
   font-size: 2.5rem;
 }
-.error{
-    color: red;
-    font-size: 0.9em;
-    margin-bottom: 5px;
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-bottom: 5px;
 }
 @media only screen and (max-width: 1300px) {
   .heading {

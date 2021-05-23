@@ -19,9 +19,9 @@ export default {
     // LogIn,
 
   },
-  mounted() {
-    //plugin bootstrap js to the head of document , i couldnt find way to add it at the bottom of body
+   mounted() {
 
+    //plugin bootstrap js to the head of document , i couldnt find way to add it at the bottom of body
     const plugin = document.createElement("script");
     plugin.setAttribute(
         "src",
@@ -37,6 +37,8 @@ export default {
     );
     plugin1.async = true;
     document.head.appendChild(plugin1);
+
+
   },
 }
 </script>

@@ -1,21 +1,13 @@
 const express = require("express");
-
 const mongoose = require("mongoose");
-const path = require("path");
-const app = express();
-// const router = require("./routes/admin");
-const cookieParser = require("cookie-parser");
-app.use(cookieParser());
 
-// app.set("view engine", "ejs");
-// app.set("views", "views");
+const app = express();
+const routers = require("./routers/appRouter");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
-// app.use(express.static(path.join(__dirname, "public")));
-// app.use(router);
+app.use(routers);
 
 const port = 3000;
 const url =
