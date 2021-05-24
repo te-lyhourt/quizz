@@ -10,8 +10,8 @@
             minute
           </p>
         </div>
-
-        <form action="http://localhost:3000/signUp" method="POST">
+<!-- action="http://localhost:3000/signUp" method="Post" -->
+        <form  @submit="submitSignUp()">
           <p>Username</p>
           <input
             required="required"
@@ -19,21 +19,21 @@
             title="Username should be 4 to 20 english letter or number "
             class="long-box"
             type="text"
-            name="username"
+            name="userName"
             maxlength="20"
             v-model="userName"
           />
           <br />
           <p class="email">Email address</p>
-
-          <!-- <span style="color: red;" v-if="errorEmail">{{message+'error'}}</span> -->
-
+          <div class="error">
+            <span style="color: red;" v-if="errorEmail">{{message+'error'}}</span>
+          </div>
           <input
             required="required"
             class="long-box"
             type="email"
-            name="email"
-            v-model="email"
+            name="userEmail"
+            v-model="userEmail"
           />
           <br />
 
@@ -49,9 +49,9 @@
           />
           <br />
           <p>Confirm Password</p>
-          <div class="error">
+          <!-- <div class="error">
             <span v-if="checkPasswrod">{{ errorMessage }}</span>
-          </div>
+          </div> -->
           <input
             required="required"
             class="long-box"
@@ -78,6 +78,7 @@
             type="submit"
             id="submit"
             :disabled="!ableSubmit"
+            
           >
             Sign Up
           </button>
@@ -86,7 +87,7 @@
 
       <p class="sign-up">
         Already have account ?
-        <a href="http://localhost:3000/signIn">sign in</a>
+        <a href="http://localhost:8080/logIn">sign in</a>
       </p>
       <p class="copy-right">2021 © Awesome Shop by Lyhourt</p>
     </div>
@@ -94,11 +95,13 @@
 </template>
 <script>
 import brand from "@/components/brand.vue";
+import axios from 'axios'
 export default {
+  // props:["errorEmail","message"],
   data() {
     return {
       userName: "",
-      email: "",
+      userEmail: "",
       password: "",
       confirmPass: "",
       errorMessage: "",
@@ -107,11 +110,27 @@ export default {
   },
   methods: {
     submitSignUp() {
-      this.$store.dispatch("addUser", {
-        userName: this.userName,
-        userEmail: this.email,
-        password: this.password,
-      });
+      alert('work')
+      // this.$store.dispatch("addUser", {
+      //   userName: this.userName,
+      //   userEmail: this.email,
+      //   password: this.password,
+      // });
+      axios.post('http://192.168.1.17:3000/sigUp',
+      {
+        userEmail : this.userEmail,
+        password : this.password,
+        userName : this.userName,
+        
+      })
+      .then( (result) => {
+        const status = JSON.parse(result.data);
+        console.log(status)
+
+      },(error) => {
+        console.log(error);
+      })
+
     },
     wrongPassword() {
       this.errorMessage = "passowrd and confirm password should be the same";
@@ -128,7 +147,7 @@ export default {
         this.password != "" &&
         this.confirmPass != "" &&
         !this.checkPasswrod &&
-        this.termChecked
+        this.checked
       ) {
         return true;
       } else return false;

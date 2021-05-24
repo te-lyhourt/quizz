@@ -1,12 +1,11 @@
-
 const modul = require('../models/user');
 const bcrypt = require("bcryptjs");
 const User = modul.user;
 
 exports.createUser = (req,res)=>{
-    const name = req.body.username;
+    const name = req.body.userName;
     console.log(name)
-    const email = req.body.email;
+    const email = req.body.userEmail;
     console.log(email)
     const password = req.body.password;
     console.log(password)
@@ -30,9 +29,11 @@ exports.createUser = (req,res)=>{
                     password: bcrypt.hashSync(password, salt),
                     // type
                 }).save().then(result=>{
-                console.log(result);
-                console.log("uploaded person")
-                res.redirect("http://localhost:8080/")
+                    console.log(result);
+                    console.log("uploaded user")
+                    // res.redirect('http://localhost:8080/logIn')
+                    res.json({"errorEmail":true})
+                    res.send('work')
                 }).catch(e=>{
                     console.log(e);
                     console.log("save error")
@@ -41,7 +42,8 @@ exports.createUser = (req,res)=>{
         //email exist
         }else{
             console.log(result)
-            res.render("http://localhost:8080/", {errorEmail: true, message: "email is already exist!"});
+            res.send('not work')
+            // res.render("http://localhost:8080/signUp",{errorEmail: true , message:'email is already exist'});
         }
     })
 }

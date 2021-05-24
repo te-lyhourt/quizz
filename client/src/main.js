@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import {createStore} from 'vuex'
 import router from './router/router'
+// import VueAxios from 'vue-axios'
+// import axios from 'axios'
 
 import App from './App.vue'
 
@@ -43,4 +45,5 @@ const shore = createStore({
 const app = createApp(App)
 app.use(shore)
 app.use(router)
+// app.use(VueAxios, axios)
 app.mount('#app')
