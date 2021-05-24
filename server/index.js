@@ -3,16 +3,17 @@ const mongoose = require("mongoose");
 
 const app = express();
 const routers = require("./routers/appRouter");
+const cors = require('cors')
 
-app.set("view engine", "ejs");
-app.set("views", "views");
 
+
+
+app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(routers);
-var cors = require('cors')
-app.use(cors())
+
 const port = 3000;
 const url =
   "mongodb+srv://user1:12345678Te@cluster0.rbvla.mongodb.net/Quiz?retryWrites=true&w=majority";

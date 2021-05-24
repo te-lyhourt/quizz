@@ -29,11 +29,12 @@ exports.createUser = (req,res)=>{
                     password: bcrypt.hashSync(password, salt),
                     // type
                 }).save().then(result=>{
-                    console.log(result);
+
                     console.log("uploaded user")
                     // res.redirect('http://localhost:8080/logIn')
-                    res.json({"errorEmail":true})
-                    res.send('work')
+                    const result = res.send({errorEmail : false})
+
+                    return  result
                 }).catch(e=>{
                     console.log(e);
                     console.log("save error")
@@ -41,9 +42,11 @@ exports.createUser = (req,res)=>{
             
         //email exist
         }else{
+            console.log('email is already exist')
             console.log(result)
-            res.send('not work')
-            // res.render("http://localhost:8080/signUp",{errorEmail: true , message:'email is already exist'});
+            const result =  res.send({errorEmail: true });
+            return result
+            
         }
     })
 }

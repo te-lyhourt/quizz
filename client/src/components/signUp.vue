@@ -11,7 +11,7 @@
           </p>
         </div>
 <!-- action="http://localhost:3000/signUp" method="Post" -->
-        <form  @submit="submitSignUp()">
+        <form  @submit.prevent="submitSignUp()">
           <p>Username</p>
           <input
             required="required"
@@ -26,7 +26,7 @@
           <br />
           <p class="email">Email address</p>
           <div class="error">
-            <span style="color: red;" v-if="errorEmail">{{message+'error'}}</span>
+            <span style="color: red;" v-if="emailAlreadyExist">email is already exist</span>
           </div>
           <input
             required="required"
@@ -49,9 +49,9 @@
           />
           <br />
           <p>Confirm Password</p>
-          <!-- <div class="error">
-            <span v-if="checkPasswrod">{{ errorMessage }}</span>
-          </div> -->
+          <div class="error">
+            <span v-if="checkPasswrod">passowrd and confirm password should be the same</span>
+          </div>
           <input
             required="required"
             class="long-box"
@@ -94,6 +94,7 @@
   </div>
 </template>
 <script>
+import router from '../router/router'
 import brand from "@/components/brand.vue";
 import axios from 'axios'
 export default {
@@ -104,19 +105,18 @@ export default {
       userEmail: "",
       password: "",
       confirmPass: "",
-      errorMessage: "",
       checked: false,
+      errorEmail:''
     };
   },
   methods: {
     submitSignUp() {
-      alert('work')
       // this.$store.dispatch("addUser", {
       //   userName: this.userName,
       //   userEmail: this.email,
       //   password: this.password,
       // });
-      axios.post('http://192.168.1.17:3000/sigUp',
+      axios.post('http://localhost:8080/signUp',
       {
         userEmail : this.userEmail,
         password : this.password,
@@ -124,17 +124,19 @@ export default {
         
       })
       .then( (result) => {
-        const status = JSON.parse(result.data);
-        console.log(status)
-
+        if(result.data.errorEmail){
+          this.errorEmail = result.data.errorEmail
+        }
+          
+        else if(!result.data.errorEmail){
+          router.push({name:"logIn"})
+        }
       },(error) => {
         console.log(error);
       })
 
     },
-    wrongPassword() {
-      this.errorMessage = "passowrd and confirm password should be the same";
-    },
+
   },
   components: {
     brand,
@@ -143,23 +145,32 @@ export default {
     ableSubmit() {
       if (
         this.userName != "" &&
-        this.email != "" &&
+        this.userEmail != "" &&
         this.password != "" &&
         this.confirmPass != "" &&
         !this.checkPasswrod &&
         this.checked
+        
       ) {
         return true;
       } else return false;
     },
     checkPasswrod() {
       if (this.password == this.confirmPass) {
-        this.wrongPassword();
         return false;
       } else {
         return true;
       }
     },
+    emailAlreadyExist(){
+      if(this.errorEmail){
+        console.log(this.errorMessage)
+        return true
+      }
+      else{
+        return false
+      }
+    }
   },
 };
 </script>
