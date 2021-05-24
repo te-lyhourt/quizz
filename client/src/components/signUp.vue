@@ -26,7 +26,7 @@
           <br />
           <p class="email">Email address</p>
 
-          <span style="color: red;" v-if="errorEmail">{{message+'error'}}</span>
+          <!-- <span style="color: red;" v-if="errorEmail">{{message+'error'}}</span> -->
 
           <input
             required="required"

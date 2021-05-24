@@ -1,45 +1,49 @@
 <template>
   <div>
-    <!-- <navbar style="background:black"></navbar> -->
-    <!-- <log-in></log-in> -->
-    <sign-up></sign-up>
+    <!-- <homepage></homepage> -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import SignUp from './components/signUp.vue';
-// import navbar from '@/components/navbar.vue'
+// import Homepage from '@/components/homepage.vue';
+// import SignUp from './components/signUp.vue';
+
 // import LogIn from '@/components/logIn.vue'
 
 export default {
   name: 'App',
   components: {
-    SignUp,
-    // navbar,
+    // Homepage
+    // SignUp,
+
     // LogIn,
 
   },
-   mounted() {
+  methods: {
+    bootStrabJsplugIn(){
+      //plugin bootstrap js to the head of document , i couldnt find way to add it at the bottom of body
+      const plugin = document.createElement("script");
+      plugin.setAttribute(
+          "src",
+          "//code.jquery.com/jquery-3.5.1.slim.min.js"
+      );
+      plugin.async = true;
+      document.head.appendChild(plugin);
 
-    //plugin bootstrap js to the head of document , i couldnt find way to add it at the bottom of body
-    const plugin = document.createElement("script");
-    plugin.setAttribute(
-        "src",
-        "//code.jquery.com/jquery-3.5.1.slim.min.js"
-    );
-    plugin.async = true;
-    document.head.appendChild(plugin);
-
-    const plugin1 = document.createElement("script");
-    plugin1.setAttribute(
-        "src",
-        "//cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-    );
-    plugin1.async = true;
-    document.head.appendChild(plugin1);
-
-
+      const plugin1 = document.createElement("script");
+      plugin1.setAttribute(
+          "src",
+          "//cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+      );
+      plugin1.async = true;
+      document.head.appendChild(plugin1);
+    },
   },
+   mounted() {
+     this.bootStrabJsplugIn()
+  },
+  
 }
 </script>
 
