@@ -94,7 +94,7 @@
   </div>
 </template>
 <script>
-import router from '../router/router'
+import router from '../../router/router'
 import brand from "@/components/brand.vue";
 import axios from 'axios'
 export default {
