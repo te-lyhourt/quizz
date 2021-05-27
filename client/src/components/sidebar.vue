@@ -76,7 +76,6 @@ export default {
   background: #11101d;
 }
 .sidebar {
-
   position: fixed;
   width: 78px;
   height: 100%;
@@ -116,7 +115,7 @@ export default {
   margin: 20px 0;
 }
 .sidebar ul li .tooltip {
-  position: absolute;
+  
   left: 125px;
   top: 0;
   transform: translate(-50%, -50%);

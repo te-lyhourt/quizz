@@ -1,9 +1,7 @@
 <template v-html="html">
     <div>
-        
         <navbar style="background:black"></navbar>
         <sidebar></sidebar>
-
     </div>
 </template>
 <script>
