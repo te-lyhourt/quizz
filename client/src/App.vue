@@ -1,25 +1,15 @@
 <template>
   <div>
-    <!-- <homepage></homepage> -->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import Homepage from '@/components/homepage.vue';
-// import SignUp from './components/signUp.vue';
 
-// import LogIn from '@/components/logIn.vue'
 
 export default {
   name: 'App',
-  components: {
-    // Homepage
-    // SignUp,
 
-    // LogIn,
-
-  },
   methods: {
     bootStrabJsplugIn(){
       //plugin bootstrap js to the head of document , i couldnt find way to add it at the bottom of body

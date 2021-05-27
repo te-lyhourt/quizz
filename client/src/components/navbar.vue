@@ -24,7 +24,7 @@
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="/signUp">
               <button type="button" class="btn btn-outline-dark button-text">Join</button>
             </a>
           </li>
