@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div class="a" style="height: 100%;">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-
 
 export default {
   name: 'App',
@@ -47,6 +46,13 @@ export default {
     background: #1F1F1F;
     font-family: 'Concert One', sans-serif;
     color: white;
+    height: 100%;
+
   }
-  
+  html{
+    height: 100%;
+  }
+  #app{
+    height: 100%;
+  }
 </style>

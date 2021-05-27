@@ -1,7 +1,5 @@
 <template v-html="html">
   <div class="sidebar">
-
-      
       <ul class="nav_list">
           <li>
               <i class="bx bx-menu" id="btn"></i>
@@ -76,16 +74,21 @@ export default {
   background: #11101d;
 }
 .sidebar {
-  position: fixed;
   width: 78px;
-  height: 100%;
+  top:0;
+  bottom: 0;
   background: #11101d;
   padding: 6px 14px;
   z-index: 99;
   transition: all 0.5s ease;
+  float:left; 
+  min-width:20px;
+  
+  height: 100%;
 }
 .sidebar.active {
   width: 240px;
+
 }
 
 .sidebar #btn {

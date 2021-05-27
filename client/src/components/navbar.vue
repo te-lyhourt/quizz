@@ -1,5 +1,5 @@
 <template v-html="html">
-  <div>
+  <div class=".bd-navbar">
     <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="Home page.html">
           Quizz!
@@ -46,7 +46,9 @@ export default {
     
     .navbar
     {
-        padding: 20px 10px;
+      position: sticky;
+      background:black;
+      padding: 20px 10px;
     }
     .navbar-brand
     {
