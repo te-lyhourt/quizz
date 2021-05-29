@@ -9,41 +9,38 @@
             </div>
         
 
-            <form >
-            <!-- action="http://localhost:3000/signIn" method="POST" -->
+            <form @submit.prevent="logIn()">
                 <p class="left-text">Email address</p>
-
-                <span style="color: red;" v-if="notFound">
-                    incorrect password or email not exist!
-                </span>
-
-                <input class="long-box" v-model="input.email" type="email" name="email" required="required" /> <br/>
+                <div class="error">
+                    <span style="color: red;" v-if="notFound">
+                        incorrect password or email not exist!
+                    </span>
+                </div>
+                <input class="long-box" v-model="email" type="email" name="email" required="required" /> <br/>
                 <p class="left-text">Password</p> 
-                <input class="long-box"  v-model="input.password" type="password" name="password" pattern=".{8,}" title="password should be atleast 8 letter" required="required"/> <br/>
+                <input class="long-box"  v-model="password" type="password" name="password" pattern=".{8,}" title="password should be atleast 8 letter" required="required"/> <br/>
                 
 
-                <button class="long-box btn btn-primary" type="button" @click="logIn">Sign Up</button> 
+                <button class="long-box btn btn-primary" type="submit" >Sign Up</button> 
             </form>
         </div>
         
-        <p class="sign-up">Dont have any account ? <a href="http://localhost:3000/signUp">sign up</a></p>
+        <p class="sign-up">Dont have any account ? <a href="http://localhost:8080/signUp">sign up</a></p>
         <p class="copy-right">2021 © Quizz! by Lyhourt</p>
     </div>
     </div>
 </template>
 <script>
+import router from '../../router/router'
+import axios from 'axios'
 import brand from '@/components/brand.vue'
 export default {
     data() {
         return {
             notFound: false,
-            input:[
-                {
-                    email:'',
-                    password:'',
-                }
-            ]
-            
+            email:'',
+            password:'',
+            passwordIsMatch:''
         }
     },
     components: { 
@@ -51,16 +48,31 @@ export default {
     },
     methods: {
         logIn(){
-            const user =  this.$store.getters.userLogIn(this.input)
-            alert(user)
-            if(user==undefined){
-                this.notFound = true
-                alert('not found')
-            }
-            else if (user.userEmail == this.input.email, user.password == this.input.password){
-                alert('log in')
-            }
-            
+            // const user =  this.$store.getters.userLogIn(this.input)
+            // alert(user)
+            // if(user==undefined){
+            //     this.notFound = true
+            //     alert('not found')
+            // }
+            // else if (user.userEmail == this.input.email, user.password == this.input.password){
+            //     alert('log in')
+            // }
+            axios.post('http://localhost:8080/logIn',
+            {
+                userEmail : this.email,
+                password : this.password,
+            })
+            .then( (result) => {
+                if(result.data.passwordIsMatch){
+                    router.push({name:"homepage"})
+                }
+                
+                else if(!result.data.passwordIsMatch){
+                    this.notFound = true
+                }
+            },(error) => {
+                console.log(error);
+            })
         }
         
     },
@@ -124,6 +136,12 @@ export default {
     .heading{
         font-size:2.5rem
     }
+    .error {
+        color: red;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+
     @media only screen and (max-width: 1300px) {
         
         .heading{

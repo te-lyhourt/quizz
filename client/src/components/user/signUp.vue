@@ -94,8 +94,9 @@
   </div>
 </template>
 <script>
-import router from '../../router/router'
+
 import brand from "@/components/brand.vue";
+import router from '../../router/router'
 import axios from 'axios'
 export default {
   // props:["errorEmail","message"],
@@ -121,7 +122,6 @@ export default {
         userEmail : this.userEmail,
         password : this.password,
         userName : this.userName,
-        
       })
       .then( (result) => {
         if(result.data.errorEmail){

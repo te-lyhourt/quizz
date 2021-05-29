@@ -7,6 +7,7 @@
         
         <li>
           <a href="#">
+            
             <i class='bx bxs-message-rounded-add'></i>
             <span class="links_name">Create quiz</span>
           </a>
@@ -14,8 +15,8 @@
         </li>
         <li>
           <a href="#">
-           <i class='bx bxs-message-edit' ></i>
-            <span class="links_name">Attem quiz</span>
+           <i class='bx bxs-message-rounded-edit'></i>
+            <span class="links_name">Take quiz</span>
           </a>
           <span class="tooltip">Messages</span>
         </li>
@@ -59,8 +60,7 @@ export default {
 };
 </script>
 <style scoped>
-/* Boxicons CDN Link */
-@import url("https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css");
+
 /* Google Font CDN Link */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 * {

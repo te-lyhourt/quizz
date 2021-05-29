@@ -1,8 +1,8 @@
 import {createWebHistory,createRouter} from 'vue-router'
 import signUp from '@/components/user/signUp.vue'
 import logIn from '@/components/user/logIn.vue'
-import homepage from '@/components/homepage.vue'
-import createQuiz from '../components/quiz/createQuiz.vue'
+import homepage from '../components/quiz/homepage.vue'
+import createQuiz from '../components/quiz/createQuizes.vue'
 
 const routes = [
     {
@@ -21,10 +21,10 @@ const routes = [
         component: signUp
     },
     {
-        path:'/createquiz',
+        path:'/createQuiz',
         name:'createQuiz',
         component: createQuiz
-    }
+    },
 ]
 
 const router = createRouter({

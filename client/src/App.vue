@@ -37,10 +37,14 @@ export default {
 </script>
 
 <style>
+  /* fontawesome CDN Link */
   @import url("https://use.fontawesome.com/releases/v5.14.0/css/all.css");
+  
+  /* google fonts CDN Link */
   @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
   @import url("https://fonts.googleapis.com/css2?family=Concert+One&display=swap");
-  
+  /* Boxicons CDN Link */
+  @import url("https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css");
 
   body{
     background: #1F1F1F;
@@ -55,4 +59,5 @@ export default {
   #app{
     height: 100%;
   }
+  
 </style>
