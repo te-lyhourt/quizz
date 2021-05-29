@@ -27,24 +27,30 @@
         
         <p class="sign-up">Dont have any account ? <a href="http://localhost:8080/signUp">sign up</a></p>
         <p class="copy-right">2021 © Quizz! by Lyhourt</p>
+
+        <pop-up v-if="popUp" v-on:getClick="goHome" :text = message></pop-up>
     </div>
     </div>
 </template>
 <script>
+
 import router from '../../router/router'
 import axios from 'axios'
 import brand from '@/components/brand.vue'
+import PopUp from '../popUp.vue'
 export default {
     data() {
         return {
             notFound: false,
             email:'',
             password:'',
-            passwordIsMatch:''
+            message:'',
+            popUp:'',
         }
     },
     components: { 
-      brand 
+      brand,
+      PopUp,
     },
     methods: {
         logIn(){
@@ -64,15 +70,29 @@ export default {
             })
             .then( (result) => {
                 if(result.data.passwordIsMatch){
-                    router.push({name:"homepage"})
+
+                    this.popUp = true;
+                    this.notFound = false;
+                    this.message = "successfully log In !!";
                 }
-                
                 else if(!result.data.passwordIsMatch){
-                    this.notFound = true
+                    this.notFound = true;
+                    this.popUp = true;
+                    this.message = "log In fail !!";
+
                 }
             },(error) => {
                 console.log(error);
             })
+        },
+        goHome(){
+            if(!this.notFound){
+                router.push({name:"homepage"})
+            }
+            else{
+                this.popUp = false
+            }
+            
         }
         
     },

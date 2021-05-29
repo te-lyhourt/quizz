@@ -91,10 +91,11 @@
       </p>
       <p class="copy-right">2021 © Awesome Shop by Lyhourt</p>
     </div>
+    <pop-up v-if="popUp" v-on:getClick="goHome" :text = message></pop-up>
   </div>
 </template>
 <script>
-
+import PopUp from '../popUp.vue';
 import brand from "@/components/brand.vue";
 import router from '../../router/router'
 import axios from 'axios'
@@ -107,7 +108,9 @@ export default {
       password: "",
       confirmPass: "",
       checked: false,
-      errorEmail:''
+      errorEmail:'',
+      popUp:'',
+      message:'',
     };
   },
   methods: {
@@ -126,20 +129,32 @@ export default {
       .then( (result) => {
         if(result.data.errorEmail){
           this.errorEmail = result.data.errorEmail
+          this.popUp = true;
+          this.message = "sign Up fail !!";
         }
           
         else if(!result.data.errorEmail){
-          router.push({name:"logIn"})
+          this.popUp = true;
+          this.errorEmail = false;
+          this.message = "successfully sign Up !!";
         }
       },(error) => {
         console.log(error);
       })
 
     },
+    goHome(){
+      if(!this.errorEmail){
+        router.push({name:"logIn"})
+      }else{
+        this.popUp = false
+      }
+    }
 
   },
   components: {
     brand,
+    PopUp,
   },
   computed: {
     ableSubmit() {
@@ -164,7 +179,6 @@ export default {
     },
     emailAlreadyExist(){
       if(this.errorEmail){
-        console.log(this.errorMessage)
         return true
       }
       else{
