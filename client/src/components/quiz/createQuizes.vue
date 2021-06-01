@@ -16,7 +16,15 @@
       </div>
       <div class="bottom">
         <p>Quesions</p>
-        <p class="empty">No quesion yet</p>
+        <!-- <p class="empty">No quesion yet</p> -->
+        <div class="question-area">
+          <questionBox :question="'1+2sadadas,mdnsa,;dmsa,dmsa,ldmnsa;lkjsa;dlkjsad;lsajk;ldksa;ldk;salkd;lsadk;saldk;alsdk;lsadkd;lsakd;laskd;lsak;ldsak;lsak;ldsak;ldsakd;lsak;dlk'" :type="'multiple'"></questionBox>
+          <questionBox :question="'1+2'" :type="'true/fale'"></questionBox>
+
+
+
+        </div>
+        
         <button class="btn btn-dark addQuestion" type="button" @click="questionBoard=true" >Add quesion</button>
       </div>
       <board v-if="questionBoard" v-on:getClick="questionBoard=false"></board>
@@ -27,6 +35,7 @@
 <script>
 import brand from '../brand';
 import board from '../question/questionBoard'
+import questionBox from '../question/questionBox'
 export default {
   data() {
     return {
@@ -35,7 +44,8 @@ export default {
   },
   components:{
     brand,
-    board
+    board,
+    questionBox
   },
   methods: {
     bringeQuestionBoard(){
@@ -45,8 +55,7 @@ export default {
 }
 </script>
 
-<style scopd>
-  
+<style scoped>
   .box {
     margin: 60px auto;
     text-align: center;
@@ -57,6 +66,7 @@ export default {
     flex-direction: column;
     border-radius: 10px;
   }
+  
   .long-box{
     border-radius: 5px;
     resize: none;
@@ -74,6 +84,13 @@ export default {
     float: right;
    
   }
+  .save:hover,.cancel:hover{
+    text-shadow: 0 0 10px #03bcf4,
+        0 0 20px #03bcf4,
+        0 0 40px #03bcf4 ;
+    color: white;
+    text-decoration: none;
+  }
   .mid{
     margin-top: 10px;
     text-align: left;
@@ -85,17 +102,15 @@ export default {
 
   a{
     color: white;
-    
   }
-  a:hover{
-    text-shadow: 0 0 10px #03bcf4,
-        0 0 20px #03bcf4,
-        0 0 40px #03bcf4 ;
-    color: white;
-    text-decoration: none;
-  }
+  
   .bottom{
     text-align: left;
+  }
+  .question-area{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
   .empty{
     color: gray;
@@ -112,7 +127,5 @@ export default {
         0 0 20px #03bcf4,
         0 0 40px #03bcf4 
   }
-  @media screen {
-    
-  }
+
 </style>

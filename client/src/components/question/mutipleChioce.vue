@@ -54,7 +54,7 @@ export default {
 }
 </script>
 
-<style scopd>
+<style scoped>
   
   .box {
     margin: 60px auto;
