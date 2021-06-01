@@ -1,94 +1,118 @@
 <template v-html="html">
-  <div class="box">
-      <navbar></navbar>
-      <div class="content">
-        <div class="left">
-          <sidebar></sidebar>
-        </div>
-        <div class="right">
-          <div class="top">
-            <span class="title">
-                My Quizes
-            </span>
-            <a href=""><button class="btn btn-dark button-text">Create quiz</button></a>
-            
-          </div>
-
-          <div class="quiz row">
-            <quiz-box></quiz-box>
-            <quiz-box></quiz-box>
-            <quiz-box></quiz-box>
-            <quiz-box></quiz-box>
-            <quiz-box></quiz-box>
-          </div>
-        </div>
-        
+  <div>
+    <brand></brand>
+    <div class="box">
+      <div class="top">
+        <a href="" class="cancel" style="font-size:1.25rem">Cancel</a>
+        <span style="font-size:1.5rem">Create Quiz</span>
+        <a href="" class="save" style="font-size:1.25rem">Save</a>
       </div>
+      <div class="mid">
+        <p>Title</p>
+         <input class="long-box" name="title" required="required" maxlength="20" placeholder="Add Title" /> <br/>
+        <p>Description</p>
+        
+        <textarea class="long-box" name="description" required="required" maxlength="280" rows="3" placeholder="Add Decription"/> <br/>
+      </div>
+      <div class="bottom">
+        <p>Quesions</p>
+        <p class="empty">No quesion yet</p>
+        <button class="btn btn-dark addQuestion" type="button" @click="questionBoard=true" >Add quesion</button>
+      </div>
+      <board v-if="questionBoard" v-on:getClick="questionBoard=false"></board>
+    </div>
+
   </div>
 </template>
 <script>
-import Navbar from '../navbar.vue';
-import Sidebar from '../sidebar.vue';
-
-import QuizBox from './quizBox.vue';
-
+import brand from '../brand';
+import board from '../question/questionBoard'
 export default {
-  components: {
-
-    QuizBox,
-    Sidebar,
-    Navbar,
+  data() {
+    return {
+      questionBoard:"",
+    }
   },
-};
+  components:{
+    brand,
+    board
+  },
+  methods: {
+    bringeQuestionBoard(){
+
+    }
+  },
+}
 </script>
-<style scoped>
-.top{
-  margin-top: 30px;
-}
-.title{
-  font-size: 2rem;
-  margin-left: 30px;
-  margin-bottom: 40px;
-}
-.box{
+
+<style scopd>
   
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-.content{
-  margin: 0 0 0 0;
-  display: flex;
-  height: 100%;
-}
-.quiz{
-  display: flex;
-  flex-direction: row;
-}
-.left{
-  margin-right: 40px;
-  background: #11101d;
-  float: right;
-}
-a{
-  margin-top: 10px;
-  border-radius: 0 0 30px;
-  float: right;
-  margin-right: 120px;
-}
-.btn.button-text{
-  font-size: 1.25rem;
-  color: white;
-  background: black;
-}
-.btn.button-text:hover{
-  text-shadow: 0 0 10px #03bcf4,
+  .box {
+    margin: 60px auto;
+    text-align: center;
+    width: 38%;
+    padding: 30px 70px;
+    background-color: #353535;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+  }
+  .long-box{
+    border-radius: 5px;
+    resize: none;
+    background: #202124;
+    color: #767676;
+    font-size: 1rem;
+  }
+  .top{
+    margin-bottom: 30px;
+  }
+  .cancel{
+    float: left;
+  }
+  .save{
+    float: right;
+   
+  }
+  .mid{
+    margin-top: 10px;
+    text-align: left;
+  }
+  .long-box {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  a{
+    color: white;
+    
+  }
+  a:hover{
+    text-shadow: 0 0 10px #03bcf4,
+        0 0 20px #03bcf4,
+        0 0 40px #03bcf4 ;
+    color: white;
+    text-decoration: none;
+  }
+  .bottom{
+    text-align: left;
+  }
+  .empty{
+    color: gray;
+    margin-left: 10px;
+  }
+  .addQuestion{
+    margin-top: 20px;
+    float:right;
+    border: solid #767676 0.90px;
+    
+  }
+  .addQuestion:hover{
+    text-shadow: 0 0 10px #03bcf4,
         0 0 20px #03bcf4,
         0 0 40px #03bcf4 
-}
-@media only screen and (max-width: 600px){
-  a{
-    margin-right: 10px;
   }
-}
+  @media screen {
+    
+  }
 </style>

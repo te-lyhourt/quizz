@@ -3,7 +3,7 @@ import signUp from '@/components/user/signUp.vue'
 import logIn from '@/components/user/logIn.vue'
 import homepage from '../components/quiz/homepage.vue'
 import createQuiz from '../components/quiz/createQuizes.vue'
-
+import multiple from '../components/question/mutipleChioce.vue'
 const routes = [
     {
         path:'/',
@@ -25,6 +25,11 @@ const routes = [
         name:'createQuiz',
         component: createQuiz
     },
+    {
+        path:"/createQuiz/multiple",
+        name:'multiple',
+        component: multiple
+    }
 ]
 
 const router = createRouter({
