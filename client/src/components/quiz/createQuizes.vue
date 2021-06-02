@@ -40,6 +40,13 @@ export default {
   data() {
     return {
       questionBoard:"",
+      quiz:[
+        {
+          question:'',
+          answer:[],
+          rightAnswer:'',
+        }
+      ]
     }
   },
   components:{
@@ -48,7 +55,7 @@ export default {
     questionBox
   },
   methods: {
-    bringeQuestionBoard(){
+    saveQuiz(){
 
     }
   },

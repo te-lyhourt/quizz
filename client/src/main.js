@@ -12,9 +12,9 @@ const shore = createStore({
         return{
             users:[
                 {
-                    userName:'lyhourt',
-                    userEmail:'lyhourt@gmail.com',
-                    password:'123'
+                    userName:'',
+                    userEmail:'',
+                    password:''
                 }
             ]
         }

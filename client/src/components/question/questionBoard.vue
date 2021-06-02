@@ -12,13 +12,13 @@
         </div>
         
         <div class="bottom">
-          <div class="multiple-question quesion-box">
+          <div class="multiple-question question-box">
             <a href="/createquiz/multiple">
               <i class="fas fa-border-all fa-lg"></i>
               Multiple Quesion
             </a>
           </div>
-          <div class="truefalse-question quesion-box">
+          <div class="truefalse-question question-box">
             <a href="">
               <div class="truebox">
                 <i class="fas fa-columns fa-lg"></i>
@@ -114,7 +114,7 @@ export default {
   flex-direction: row;
   
 }
-.quesion-box{
+.question-box{
   margin: 20px;
   border-radius: 10px;
   border: #767676 0.5px solid;
@@ -123,11 +123,19 @@ export default {
   width: 120px;
   background: #202124;
 }
+.question-box:hover{
+      text-shadow: 0 0 10px #03bcf4,
+        0 0 20px #03bcf4,
+        0 0 40px #03bcf4 ;
+}
 .truebox{
   margin-top: 5px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-
+a{
+  text-decoration: none;
+  color: white;
+}
 </style>

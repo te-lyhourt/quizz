@@ -70,23 +70,23 @@ exports.checkUser = (req,res)=>{
             console.log("email found")
             bcrypt.compare(password, result[0].password, function(err, passwordIsMatch) {
                 if(passwordIsMatch) {
-                  // res.cookie('username', result[0].name, {
-                  //     maxAge: 86400 * 1000, // 24h
-                  //     httpOnly: true
-                  // })
-                  // res.cookie('userType', result[0].type, {
-                  //     maxAge: 86400 * 1000, // 24h
-                  //     httpOnly: true
-                  // })
-                  // res.cookie('userID', result[0]._id, {
-                  //     maxAge: 86400 * 1000, // 24h
-                  //     httpOnly: true
-                  // })
-                  // if(result[0].type=="user"){
-                  //     res.redirect("/");
-                  // }else if(result[0].type=="admin"){
-                  //     res.redirect("/admin");
-                  // }
+                  res.cookie('username', result[0].name, {
+                      maxAge: 86400 * 1000, // 24h
+                      httpOnly: true
+                  })
+                  res.cookie('userType', result[0].type, {
+                      maxAge: 86400 * 1000, // 24h
+                      httpOnly: true
+                  })
+                  res.cookie('userID', result[0]._id, {
+                      maxAge: 86400 * 1000, // 24h
+                      httpOnly: true
+                  })
+                  if(result[0].type=="user"){
+                      res.redirect("/");
+                  }else if(result[0].type=="admin"){
+                      res.redirect("/admin");
+                  }
                   console.log("right password")
                   return res.send({passwordIsMatch : true})
   
