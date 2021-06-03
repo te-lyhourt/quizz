@@ -1,6 +1,6 @@
 <template v-html="html">
   <div class="box">
-      <navbar></navbar>
+      <navbar :username="userName" :login="logIn" ></navbar>
       <div class="content">
         <div class="left">
           <sidebar></sidebar>
@@ -10,7 +10,7 @@
             <span class="title">
                 My Quizes
             </span>
-            <a href=""><button class="btn btn-dark button-text">Create quiz</button></a>
+            <a href="/createquiz"><button class="btn btn-dark button-text">Create quiz</button></a>
             
           </div>
 
@@ -29,16 +29,32 @@
 <script>
 import Navbar from '../navbar.vue';
 import Sidebar from '../sidebar.vue';
-
+import axios from 'axios'
 import QuizBox from './quizBox.vue';
 
 export default {
+  data() {
+    return {
+      logIn:'',
+      userName:'',
+    }
+  },
+  async mounted() {
+    const response = await axios.get('http://localhost:8080/homepage');
+    if(response.data.login){
+      this.logIn = true;
+      this.userName = response.data.userName;
+    }
+    else{
+      this.logIn = false;
+    }
+  },
   components: {
-
     QuizBox,
     Sidebar,
     Navbar,
   },
+
 };
 </script>
 <style scoped>

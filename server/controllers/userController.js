@@ -160,3 +160,54 @@ exports.createAmine= (req,res)=>{
     //     console.log("save error")
     // })
 }
+
+const getAppCookies = (req) => {
+    // We extract the raw cookies from the request headers
+    const rawCookies = req.headers.cookie.split('; ');
+    // rawCookies = ['myapp=secretcookie, 'analytics_cookie=beacon;']
+   
+    const parsedCookies = {};
+    rawCookies.forEach(rawCookie=>{
+    const parsedCookie = rawCookie.split('=');
+    // parsedCookie = ['myapp', 'secretcookie'], ['analytics_cookie', 'beacon']
+     parsedCookies[parsedCookie[0]] = parsedCookie[1];
+    });
+    return parsedCookies;
+};
+
+exports.loginCheck = (req,res)=>{
+
+    const cookie = getAppCookies(req);
+    const userID = cookie.userID;
+
+    // console.log(req.cookies.userID)
+    if(userID.length!=0){
+        login = true
+    }else{
+        login = false
+    }
+    
+    if(login) {
+        const userName = cookie.username;
+  
+        return res.json({login,userName})
+    }
+    else return res.json({login})
+    
+    // Quiz.find().sort({ _id: -1 }).then(products=>{
+    //     if(Object.keys(products).length === 0) {
+    //         res.render('Home page',{flag:false,login})
+    //     }else{
+    //         res.render('Home page', {
+    //             productList: products,
+    //             flag : true,
+    //             login
+    //         })
+    //     }
+    // }
+    // ).catch(e=>{
+    //     console.log(e)
+    // })
+
+    
+}

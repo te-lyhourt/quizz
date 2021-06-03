@@ -19,7 +19,7 @@
             </a>
           </div>
           <div class="truefalse-question question-box">
-            <a href="">
+            <a href="/createquiz/truefalse">
               <div class="truebox">
                 <i class="fas fa-columns fa-lg"></i>
                 True or False

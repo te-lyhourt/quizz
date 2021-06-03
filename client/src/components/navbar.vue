@@ -24,7 +24,11 @@
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/signUp">
+            <div  style="margin-top:10px;font-size:1.25rem;">
+              <span v-if="login">{{username}}</span>
+            </div>
+            
+            <a v-if="!login" class="nav-link" href="/logIn">
               <button type="button" class="btn btn-outline-dark button-text">Join</button>
             </a>
           </li>
@@ -36,9 +40,7 @@
 <script>
 
 export default {
-    components:{
-        
-    }
+  props:["username","login"],
 };
 </script>
 

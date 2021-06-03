@@ -92,6 +92,7 @@ import brand from "../brand";
 export default {
   data() {
     return {
+      type:'multiple',
       question:'',
       answer1:{
         answer:'',

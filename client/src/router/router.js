@@ -4,6 +4,7 @@ import logIn from '@/components/user/logIn.vue'
 import homepage from '../components/quiz/homepage.vue'
 import createQuiz from '../components/quiz/createQuizes.vue'
 import multiple from '../components/question/mutipleChioce.vue'
+import truefalse from '../components/question/trueFales.vue'
 const routes = [
     {
         path:'/',
@@ -21,15 +22,20 @@ const routes = [
         component: signUp
     },
     {
-        path:'/createQuiz',
-        name:'createQuiz',
+        path:'/createquiz',
+        name:'createquiz',
         component: createQuiz
     },
     {
         path:"/createQuiz/multiple",
         name:'multiple',
         component: multiple
-    }
+    },
+    {
+        path:"/createQuiz/truefalse",
+        name:'truefalse',
+        component: truefalse
+    },
 ]
 
 const router = createRouter({
