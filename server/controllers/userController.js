@@ -162,22 +162,29 @@ exports.createAmine= (req,res)=>{
 }
 
 const getAppCookies = (req) => {
+    //cookie : "userType=undefined; username=adssadsadads; userID=j%3A%2260b79335c8987e336cc68762%22"
+
     // We extract the raw cookies from the request headers
     const rawCookies = req.headers.cookie.split('; ');
-    // rawCookies = ['myapp=secretcookie, 'analytics_cookie=beacon;']
+    // rawCookies = ['userType=undefined', 'username=adssadsadads','userID=j%3A%2260b79335c8987e336cc68762%22"']
    
     const parsedCookies = {};
     rawCookies.forEach(rawCookie=>{
     const parsedCookie = rawCookie.split('=');
-    // parsedCookie = ['myapp', 'secretcookie'], ['analytics_cookie', 'beacon']
+    // parsedCookie = {['userType', 'undefined'], ['username', 'adssadsadads'] , ['userID','j%3A%2260b79335c8987e336cc68762%22']}
+     
      parsedCookies[parsedCookie[0]] = parsedCookie[1];
+    //  parsedCookie = {userType: 'undefined', username: 'adssadsadads',userID: 'j%3A%2260b79335c8987e336cc68762%22'}
     });
+
     return parsedCookies;
 };
 
 exports.loginCheck = (req,res)=>{
 
+    
     const cookie = getAppCookies(req);
+
     const userID = cookie.userID;
 
     // console.log(req.cookies.userID)

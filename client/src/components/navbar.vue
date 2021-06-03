@@ -5,35 +5,19 @@
           Quizz!
           <i class="fas fa-pen"></i>
         </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
+      
+      <ul class="navbar-nav ml-auto">
+          
           <li class="nav-item">
-            <a class="nav-link need-help" href=""
-              ><i class="fas fa-question-circle"></i> Need Help</a
-            >
-          </li>
-          <li class="nav-item">
-            <div  style="margin-top:10px;font-size:1.25rem;">
-              <span v-if="login">{{username}}</span>
-            </div>
-            
+            <a v-if="login" class="nav-link" href="">
+              <button type="button" class="btn btn-outline-dark button-text">{{username}}</button>
+            </a>
             <a v-if="!login" class="nav-link" href="/logIn">
               <button type="button" class="btn btn-outline-dark button-text">Join</button>
+              
             </a>
           </li>
         </ul>
-      </div>
     </nav>
   </div>
 </template>
@@ -48,9 +32,11 @@ export default {
     
     .navbar
     {
-      position: sticky;
+      position: fixed;
       background:black;
       padding: 20px 10px;
+      width: 100%;
+      z-index: 99;
     }
     .navbar-brand
     {

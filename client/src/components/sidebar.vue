@@ -1,39 +1,24 @@
 <template v-html="html">
   <div class="sidebar">
       <ul class="nav_list">
-          <li>
-              <i class="bx bx-menu" id="btn"></i>
-          </li>
+          
         
         <li>
           <a href="#">
-            
             <i class='bx bxs-message-rounded-add'></i>
             <span class="links_name">Create quiz</span>
           </a>
           <span class="tooltip">Create quiz</span>
         </li>
+
         <li>
           <a href="#">
            <i class='bx bxs-message-rounded-edit'></i>
             <span class="links_name">Take quiz</span>
           </a>
-          <span class="tooltip">Messages</span>
+          <span class="tooltip">Take quiz</span>
         </li>
-        <li>
-          <a href="#">
-            <i class='bx bx-history'></i>
-            <span class="links_name">History</span>
-          </a>
-          <span class="tooltip">History</span>
-        </li>
-        <li>
-          <a href="#">
-            <i class="bx bx-cog"></i>
-            <span class="links_name">Setting</span>
-          </a>
-          <span class="tooltip">Setting</span>
-        </li>
+        
       </ul>
     </div>
 </template>
@@ -43,20 +28,7 @@ export default {
     components:{
 
     },
-    mounted() {
-        let btn = document.querySelector("#btn");
-        let sidebar = document.querySelector(".sidebar");
 
-        btn.onclick = function() {
-            sidebar.classList.toggle("active");
-            if(btn.classList.contains("bx-menu")){
-                btn.classList.replace("bx-menu" , "bx-menu-alt-right");
-            }else{
-                btn.classList.replace("bx-menu-alt-right", "bx-menu");
-            }
-        }
-
-    },
 };
 </script>
 <style scoped>
@@ -74,17 +46,16 @@ export default {
   background: #11101d;
 }
 .sidebar {
+  position: fixed;
   width: 78px;
-  top:0;
+  top:96px;
   bottom: 0;
   background: #11101d;
   padding: 6px 14px;
   z-index: 99;
   transition: all 0.5s ease;
-  float:left; 
+  float:left;
   min-width:20px;
-  
-  height: 100%;
 }
 .sidebar.active {
   width: 240px;

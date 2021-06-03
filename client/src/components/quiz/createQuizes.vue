@@ -20,9 +20,6 @@
         <div class="question-area">
           <questionBox :question="'1+2sadadas,mdnsa,;dmsa,dmsa,ldmnsa;lkjsa;dlkjsad;lsajk;ldksa;ldk;salkd;lsadk;saldk;alsdk;lsadkd;lsakd;laskd;lsak;ldsak;lsak;ldsak;ldsakd;lsak;dlk'" :type="'multiple'"></questionBox>
           <questionBox :question="'1+2'" :type="'true/fale'"></questionBox>
-
-
-
         </div>
         
         <button class="btn btn-dark addQuestion" type="button" @click="questionBoard=true" >Add quesion</button>
@@ -118,6 +115,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
+    
   }
   .empty{
     color: gray;
