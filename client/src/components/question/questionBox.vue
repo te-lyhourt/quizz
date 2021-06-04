@@ -39,7 +39,6 @@ export default {
     }
     .type{
         float: right;
-        margin-right: 5px;
     }
     a:hover{
         text-shadow: none;
