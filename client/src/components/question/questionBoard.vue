@@ -13,13 +13,13 @@
         
         <div class="bottom">
           <div class="multiple-question question-box">
-            <a href="/createquiz/multiple">
+            <a @click="choose('multiple')">
               <i class="fas fa-border-all fa-lg"></i>
               Multiple Quesion
             </a>
           </div>
           <div class="truefalse-question question-box">
-            <a href="/createquiz/truefalse">
+            <a @click="choose('truefale')">
               <div class="truebox">
                 <i class="fas fa-columns fa-lg"></i>
                 True or False
@@ -38,16 +38,18 @@ export default {
     props:['text'],
     data(){
         return{
-            isActive: true
+          isActive: true
         }
-        
     },
     methods: {
       getClick(){
         this.isActive = false;
         this.$emit('getClick')
+      },
+      choose(type){
+        this.isActive = false;
+        this.$emit('choose',type);
       }
-        
     },
 };
 </script>

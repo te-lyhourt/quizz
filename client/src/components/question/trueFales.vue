@@ -1,11 +1,8 @@
 <template v-html="html">
   <div>
-    <brand></brand>
-    <div class="box">
+    <div class="box popUp" id="popUp" :class="{ active: isActive }" >
       <div class="top">
-        <a href="" class="cancel" style="font-size:1.25rem">Cancel</a>
-        <span style="font-size:1.5rem">Create question</span>
-        <a href="" class="save" style="font-size:1.25rem">Save</a>
+          <button class="x" data-close-button @click="getClick" >&times;</button>
       </div>
       <div class="mid">
         <p style="font-size:1.25rem;">Question</p>
@@ -21,7 +18,7 @@
       <div class="bottom">
         <p style="font-size:1.25rem; float:left">Answer</p>
         <div class="row">
-          <div class="answer1 col">
+          <div class="answerCol col">
             <div class="right_answer">
               <div class="right_answerText">
                 <span >Correct Answer:</span> 
@@ -33,16 +30,15 @@
                 <span class="slider round"></span>
               </label>
             </div>
-            <span ref="answer1" class="answer" >True</span>
+            <span ref="answer2" class="answer" >True</span>
           </div>
-          <div class="answer1 col">
+          <div class="answerCol col">
             <div class="right_answer">
               <div class="right_answerText">
                 <span >Correct Answer:</span> 
               </div>
               
               <label class="switch">
-                
                 <input type="checkbox">
                 <span class="slider round" @click="answer2.correct=!answer2.correct"></span>
               </label>
@@ -50,35 +46,81 @@
             <span ref="answer2" class="answer" >False</span>
           </div>
         </div>
-        
+        <button class="btn btn-dark button-text" @click="saveQuestion" type="submit">done</button>
       </div>
       
     </div>
+    <div id="overlay" :class="{ active: isActive }"></div>
   </div>
 </template>
 <script>
-import brand from "../brand";
+
 
 export default {
   data() {
     return {
-      type: "True/false",
+      isActive: true,
+
+      type:'multiple',
       question:'',
       answer1:{
-      
+        answer:'true',
         correct:false,
       },
       answer2:{
+        answer:'false',
         correct:false,
       },
     };
   },
-  components: {
-    brand,
-
-  },
   methods: {
+    getClick(){
+      this.isActive = false;
+      this.$emit('getClick')
+    },
+    saveQuestion(){
 
+      this.isActive = false;
+      const answer=[]
+      if(this.answer1.answer!=''){
+        answer.push(this.answer1)
+      }
+      if(this.answer2.answer!=''){
+        answer.push(this.answer2)
+      }
+      if(this.answer3.answer!=''){
+        answer.push(this.answer3)
+      }
+      if(this.answer4.answer!=''){
+        answer.push(this.answer4)
+      }
+      const quiz = {
+        questionTitle : this.question,
+        type : this.type,
+        answer: answer
+      }
+      this.$emit("questoinSent",quiz)
+    },
+
+    setAnswer(answer){
+
+      if(answer==1){
+        const span = this.$refs.answer1.innerHTML;        
+        this.answer1.answer = span;
+      }
+      if(answer==2){
+        const span = this.$refs.answer2.innerHTML;
+        this.answer2.answer = span;
+      }
+      if(answer==3){
+        const span = this.$refs.answer1.innerHTML;
+        this.answer3.answer = span;
+      }
+      if(answer==4){
+        const span = this.$refs.answer4.innerHTML;
+        this.answer4.answer = span;
+      }
+    }
   },
   computed:{
 
@@ -89,7 +131,7 @@ export default {
 
 <style scoped>
 .box {
-  margin: 60px auto;
+  margin: 60px auto 20px;
   text-align: center;
   width: 80%;
   padding: 30px 70px;
@@ -97,6 +139,7 @@ export default {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
+  min-width: 480px;
 }
 
 .top {
@@ -153,7 +196,7 @@ a:hover {
   float: right;
 }
 
-.answer1{
+.answerCol{
   display: flex;
   flex-direction: column;
   background-color: #202124;
@@ -169,7 +212,7 @@ a:hover {
   float: right;
   margin: 10px 10px 10px 0;
   position: relative;
-  /* display: inline-block; */
+
   width: 50px;
   height: 25px;
 }
@@ -234,5 +277,58 @@ input:checked + .slider:before {
   text-align: center;
   padding: 20px;
   color: white;
+}
+.answer:focus{
+  outline: none;
+}
+.answer[contenteditable]:empty::before {
+  content: "Add Answer";
+  color: gray;
+}
+.answer.optional[contenteditable]:empty::before {
+  content: "Add Answer(optional)";
+  color: gray;
+}
+#popUp {
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transform: scale(0);
+  transition: 200ms ease-in-out;
+  z-index: 10;
+}
+
+#popUp.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+#overlay {
+  transition: 200ms ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+}
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.x{
+  float:right;
+  color: white;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+}
+@media (max-width: 490px) {
+
+  .answerCol{
+    width: 100px;
+    font-size: 16px;
+  }
 }
 </style>

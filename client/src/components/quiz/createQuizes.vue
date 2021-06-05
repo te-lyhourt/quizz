@@ -16,29 +16,35 @@
         <p>Due Date</p>
         
         <input  
-        v-model="dueDate" 
+        v-model="quiz.dueDate" 
         class="form-control long-box date"
         placeholder="Add Due Date"
         type="text" 
         onfocus="(this.type='datetime-local')"
-        :min="min"
+        :min="quiz.createdDate"
         :max="max"
         required
         @change="checkTime"
-        ><span class="validity"></span>
+        >
+        <span class="validity" ></span>
         
       </div>
       <div class="bottom">
         <p style="margin-top:20px;">Quesions</p>
-        <!-- <p class="empty">No quesion yet</p> -->
-        <div class="question-area">
-          <questionBox :question="'1+2sadadas,mdnsa,;dmsa,dmsa,ldmnsa;lkjsa;dlkjsad;lsajk;ldksa;ldk;salkd;lsadk;saldk;alsdk;lsadkd;lsakd;laskd;lsak;ldsak;lsak;ldsak;ldsakd;lsak;dlk'" :type="'multiple'"></questionBox>
-          <questionBox :question="'1+2'" :type="'true/fale'"></questionBox>
+        <div class="question-area" @questoinSent="getQuestion" >
+          <div v-if="noQuestion">no question yet</div>
+          <div v-if="!noQuestion">
+            <questionBox  v-for="quistion in quiz.questions" :key="quistion.id" :question="quistion.questionTitle" :type="quistion.type"></questionBox>
+          </div>
+          
         </div>
         
         <button class="btn btn-dark addQuestion" type="button" @click="questionBoard=true" >Add quesion</button>
       </div>
-      <board v-if="questionBoard" v-on:getClick="questionBoard=false"></board>
+      <board v-if="questionBoard" v-on:getClick="questionBoard=false" @choose="CheckType"></board>
+      
+      <truefale v-if="truefale" v-on:getClick="truefale=false" @questoinSent="saveQuestion"></truefale>
+      <multiple v-if="multiple" v-on:getClick="multiple=false" @questoinSent="saveQuestion"></multiple>
     </div>
 
   </div>
@@ -47,7 +53,8 @@
 import brand from '../brand';
 import board from '../question/questionBoard'
 import questionBox from '../question/questionBox'
-
+import multiple from '../question/mutipleChioce.vue'
+import truefale from '../question/trueFales.vue'
 export default {
   
   data() {
@@ -61,16 +68,22 @@ export default {
     
     return {
       questionBoard:"",
-      dueDate: '',
-      min: dateTime,
+      multiple:"",
+      truefale:"",
       max: maxdateTime,
-      quiz:[
-        {
-          question:'',
-          answer:[],
-          rightAnswer:'',
-        }
-      ]
+
+      quiz:{
+        questions:[
+          {
+            questionTitle:'',
+            type:'',
+            answer:[],
+          }
+        ],
+        dueDate: '',
+        createdDate: dateTime,
+      }
+      
     }
   },
 
@@ -78,7 +91,8 @@ export default {
     brand,
     board,
     questionBox,
-
+    multiple,
+    truefale,
   },
   methods: {
     // checkTime(){
@@ -87,8 +101,19 @@ export default {
       
     //   alert(this.min+' '+this.dueDate);
     // },
-    saveQuiz(){
+    CheckType(value){
+      this.questionBoard=false
 
+      if(value=="truefale") this.truefale = true;
+      if(value=="multiple") this.multiple = true;
+    },
+    getQuestion(){
+      alert("getCall")
+      
+
+    },
+    saveQuestion(value){
+      console.log(value)
     },
     addZero(input){
       if(input<10){
@@ -96,11 +121,12 @@ export default {
       }
       return input;
     },
-
-  
   },
   computed:{
-    
+    noQuestion(){
+      if( typeof  this.quiz.question == 'undefined') return true
+      else return false
+    }
   }
 }
 </script>
@@ -119,6 +145,7 @@ export default {
     display: flex;
     flex-direction: column;
     border-radius: 10px;
+    min-width: 480px;
   }
   
   .long-box{
@@ -184,10 +211,12 @@ export default {
   .date{
     margin-right: 20px;
     margin-bottom: 0;
-    display: inline;
-    width: 93%;
-  }
+    display: block;
 
+  }
+  span::before{
+    display: none;
+  }
   input:not(:placeholder-shown):invalid+span:after {
     content: 'Dua date is empty or smaller than current date ✖';
     color: red;
@@ -195,12 +224,20 @@ export default {
     padding-left: 5px;
   }
 
-  input:not(:placeholder-shown):valid+span:after {
+  input:not(:placeholder-shown):valid+span:after{
     display: inline;
-    content: '✓';
+    content: "\2714";
     font-weight: 900;
     color: green;
     padding-left: 5px;
   }
-
+  input:not(:placeholder-shown):valid.date{
+    display: inline;
+    width: 85%;
+  }
+  @media screen and (max-width: 480px) {
+    .text {
+      font-size: 16px;
+    }
+  }
 </style>

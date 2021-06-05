@@ -2,12 +2,12 @@
   <div>
     <div id="popUp" class="popUp" :class="{ active: isActive }">
         <div class="top">
-            <button class="x" data-close-button @click="getClick" >&times;</button>
+          <button class="x" data-close-button @click="getClick" >&times;</button>
         </div>
         
         <div class="bottom">
-                <h4> {{ text }}</h4>
-                <button @click="getClick" class="btn btn-dark button-text">Ok</button>
+          <h4> {{ text }}</h4>
+          <button @click="getClick" class="btn btn-dark button-text">Ok</button>
         </div>
     </div>
 
@@ -26,8 +26,8 @@ export default {
     methods: {
 
         getClick(){
-            this.isActive = false;
-            this.$emit('getClick')
+          this.isActive = false;
+          this.$emit('getClick')
         }
     },
 };
@@ -65,9 +65,6 @@ export default {
   pointer-events: none;
   opacity: 0;
 }
-.bottom{
-  text-align: center;
-}
 #overlay.active {
   opacity: 1;
   pointer-events: all;
@@ -79,6 +76,10 @@ export default {
   border: none;
   font-size: 1.5rem;
 }
+.bottom{
+  text-align: center;
+}
+
 .btn.button-text{
   font-size: 1.25rem;
   color: white;
