@@ -90,10 +90,11 @@
 
 
 export default {
+  props:["id","questionTitle","answer"],
   data() {
     return {
+      qustionID:'',//will get from parent if user want to edit , so after edit we know where to return
       isActive: true,
-
       type:'multiple',
       question:'',
       answer1:{

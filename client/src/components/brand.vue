@@ -14,7 +14,7 @@ export default {
 <style scoped>
     .container{
         text-align: center;
-        margin-top: 20px;
+        padding-top: 50px;
     }
    .brand
     {
@@ -22,7 +22,6 @@ export default {
         font-weight: 700;
         color: white;
         margin-left: 40px;
-        
     }
     
     .brand:hover{

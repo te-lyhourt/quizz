@@ -57,10 +57,11 @@
 
 
 export default {
+  props:["id","questionTitle","answer"],
   data() {
     return {
       isActive: true,
-
+      qustionID:'',//will get from parent if user want to edit , so after edit we know where to return
       type:'multiple',
       question:'',
       answer1:{
@@ -101,26 +102,6 @@ export default {
       }
       this.$emit("questoinSent",quiz)
     },
-
-    setAnswer(answer){
-
-      if(answer==1){
-        const span = this.$refs.answer1.innerHTML;        
-        this.answer1.answer = span;
-      }
-      if(answer==2){
-        const span = this.$refs.answer2.innerHTML;
-        this.answer2.answer = span;
-      }
-      if(answer==3){
-        const span = this.$refs.answer1.innerHTML;
-        this.answer3.answer = span;
-      }
-      if(answer==4){
-        const span = this.$refs.answer4.innerHTML;
-        this.answer4.answer = span;
-      }
-    }
   },
   computed:{
 
