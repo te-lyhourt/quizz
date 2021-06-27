@@ -3,11 +3,11 @@
         <div id="game" class="flex-colum justify-center">
             <div id="hud">
                 <div class="hud-item">
-                    <p id="progressText" class="hud-prefix">
-                        Question
+                    <p id="progressText" ref="progressText" class="hud-prefix">
+                        Question {{questionCounter}} of 4
                     </p>
                     <div id="progressBar">
-                        <div id="progressBarFull">
+                        <div id="progressBarFull" ref="progressBarFull">
 
                         </div>
                     </div>
@@ -16,42 +16,148 @@
                     <p class="hud-prefix">
                         Score
                     </p>
-                    <h1 class="hud-main-text" id="score">
+                    <h1 class="hud-main-text" id="score" ref="score">
                         0
                     </h1>
                 </div>
             </div>
-            <h4 id="question">What is the answer of this question</h4>
-            <div class="choice-container">
+            <h4 id="question" ref="question">What is the answer of this question</h4>
+            <div class="choice-container"  >
                 <p class="choice-prefix">A</p>
-                <p class="choice-text" data-namer="1">Choice</p>
+                <p class="choice-text" data-number="1" ref="choices" @click="choices($event)">Choice</p>
             </div>
-            <div class="choice-container">
+            <div class="choice-container" >
                 <p class="choice-prefix">B</p>
-                <p class="choice-text" data-namer="2">Choice 2</p>
+                <p class="choice-text" data-number="2" ref="choices" @click="choices($event)">Choice 2</p>
             </div>
-            <div class="choice-container">
+            <div class="choice-container"  >
                 <p class="choice-prefix">C</p>
-                <p class="choice-text" data-namer="3">Choice 3</p>
+                <p class="choice-text" data-number="3" ref="choices" @click="choices($event)">Choice 3</p>
             </div>
-            <div class="choice-container">
+            <div class="choice-container"  >
                 <p class="choice-prefix">D</p>
-                <p class="choice-text" data-namer="4">Choice 4</p>
+                <p class="choice-text" data-number="4" ref="choices" @click="choices($event)">Choice 4</p>
             </div>
         </div>
     </div>
 </template>
 <script>
+
+// const question = document.querySelector('#question');
+
+// const progressText = document.querySelector('#progressText');
+// const scoreText = document.querySelector('#score');
+// const progressBarFull = document.querySelector('#progressBarFull');
+
+
 export default {
+    el : '#game',
+    data() {
+        return {
+            currentQuestion : {},
+            acceptingAnswer : true,
+            score : 0,
+            questionCounter : 0,
+            availableQuestion : [],
+            questions : [
+                {
+                    question : 'what is 2 + 2 ?',
+                    choice1 : '2',
+                    choice2 : '4',
+                    choice3 : '17',
+                    choice4 : '21',
+                    answer :2,
+                },
+                {
+                    question : 'what is 2 + 4 ?',
+                    choice1 : '22',
+                    choice2 : '6',
+                    choice3 : '17',
+                    choice4 : '21',
+                    answer :2,
+                },
+                {
+                    question : 'what is 100% - 4% ?',
+                    choice1 : '2aa',
+                    choice2 : '96%',
+                    choice3 : 'aaa',
+                    choice4 : '21',
+                    answer :2,
+                },  
+                {
+                    question : 'what is 23 + 2 ?',
+                    choice1 : '2',
+                    choice2 : '25',
+                    choice3 : '17',
+                    choice4 : '21',
+                    answer :2,
+                },
+            ]
+        }
+    },
     mounted() {
         document.title = "Quiz Page";
-        const plugin1 = document.createElement("script");
-        plugin1.setAttribute(
-            "src",
-            "./game.js"
-        );
-        plugin1.async = true;
-        document.head.appendChild(plugin1);
+        this.startGame()
+    },
+    methods: {
+        startGame() {
+            this.questionCounter = 0
+            this.score = 0
+            this.availableQuestion = [...this.questions]
+            this.getNewQuestion()
+        },
+        getNewQuestion () {
+            const MAX_QUESTION = 4
+
+            if(this.availableQuestion.length === 0 || this.questionCounter > MAX_QUESTION){
+                localStorage.setItem('mostRecentScore',this.score);
+
+                return window.location('/end.html');
+            }
+            this.questionCounter++
+
+            this.$refs.progressBarFull.style.width = (this.questionCounter/MAX_QUESTION)*100 + "%" 
+
+            const questionIndex = Math.floor(Math.random() * this.availableQuestion.length)
+            this.currentQuestion = this.availableQuestion[questionIndex]
+            this.$refs.question.innerText = this.currentQuestion.question
+            const choices = Array.from(this.$el.querySelectorAll('.choice-text'));
+            choices.forEach(choice =>{
+                const number = choice.dataset['number']
+                choice.innerText = this.currentQuestion['choice'+number]
+            })
+
+            this.availableQuestion.splice(questionIndex,1)
+            this.acceptingAnswer = true
+        },
+        incrementScore(num){
+            this.score +=num
+            this.$refs.score.innerText = this.score
+
+        },
+        choices($event){
+            
+            const SCORE_POINS = 100
+            if(!this.acceptingAnswer) return 
+            this.acceptingAnswer = false
+            const selectedChoice = $event.target
+            const selectedAnswer = selectedChoice.dataset['number']
+
+            let classToApply = selectedAnswer == this.currentQuestion.answer ? 'correct':
+            'incorrect'
+
+            if(classToApply === 'correct'){
+                this.incrementScore(SCORE_POINS)
+            }
+
+            selectedChoice.parentElement.classList.add(classToApply)
+
+            setTimeout(()=>{
+                selectedChoice.parentElement.classList.remove(classToApply)
+                this.getNewQuestion()
+            },1000)
+        }
+        
     },
 }
 </script>
