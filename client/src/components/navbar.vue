@@ -1,7 +1,7 @@
 <template v-html="html">
   <div class=".bd-navbar">
     <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="Home page.html">
+        <a class="navbar-brand" href="/">
           Quizz!
           <i class="fas fa-pen"></i>
         </a>

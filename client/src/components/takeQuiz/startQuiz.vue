@@ -1,42 +1,55 @@
 <template v-html="html">
     <div >
         
-        <brand></brand>
         <div class="box">
+            
             <h1>Are you aready?</h1>
-            <a href="" class="btn btn-dark start-btn">Start</a>
+            <h2 id="end-text" >Enter Your name below to save your score !</h2>
+            <from class="end-form-container" >
+                <input type="text" name="name" id="username" class="username" placeholder=" Enter your name" v-model="userName">
+                <button class=" btn btn-dark start-btn" id="saveScoreBtn" @click="startQuiz()" :disabled="userName===''">
+                    Start !
+                </button>
+            </from>
+            
         </div>
         
     </div>
 </template>
 <script>
-import brand from '../brand.vue'
+// import brand from '../brand.vue'
 
 export default {
     mounted() {
         document.title = "Start Quiz";
     },
-    components: { brand },
-    
+    // components: { brand },
+    data() {
+        return {
+            userName:''
+        }
+    },
 }
 </script>
 <style scoped>
 
     .box{
+
         margin-top: 100px;
         box-sizing: border-box;
         text-align: center;
         font-size: 62.5%;
         min-width: 480px;
+        padding: 50px 70px 0;
     }
+
+
     h1{
         font-size: 5.4rem;
-        margin-bottom: 5rem;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
     }
-    h2{
-        font-size: 4.2rem;
-        margin-bottom: 4rem;
-    }
+
     .start-btn{
         font-size: 1.25rem;
         border: solid #767676 0.90px;
@@ -60,5 +73,27 @@ export default {
         box-shadow: none;
         text-shadow: none;
         transform: none;
+    }
+    
+    #end-text{
+        font-size:1.5rem;
+        margin: 40px 0 30px;
+    }
+
+    .end-form-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .username{
+        margin: 30px 0 50px;
+        font-size: 1.5rem;
+        border-radius: 8px;
+        min-width: 500px;
+    }
+    input{
+        padding: 0 10px;
+        outline: none;
     }
 </style>

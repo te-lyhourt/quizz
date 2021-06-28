@@ -49,7 +49,7 @@
 // const scoreText = document.querySelector('#score');
 // const progressBarFull = document.querySelector('#progressBarFull');
 
-
+import router from '../../router/router'
 export default {
     el : '#game',
     data() {
@@ -61,11 +61,11 @@ export default {
             availableQuestion : [],
             questions : [
                 {
-                    question : 'what is 2 + 2 ?',
-                    choice1 : '2',
-                    choice2 : '4',
-                    choice3 : '17',
-                    choice4 : '21',
+                    question : 'human can fly',
+                    choice1 : 'true',
+                    choice2 : 'false',
+                    // choice3 : '17',
+                    // choice4 : '21',
                     answer :2,
                 },
                 {
@@ -112,7 +112,7 @@ export default {
             if(this.availableQuestion.length === 0 || this.questionCounter > MAX_QUESTION){
                 localStorage.setItem('mostRecentScore',this.score);
 
-                return window.location('/end.html');
+                router.push({ name:"endquiz"})
             }
             this.questionCounter++
 
@@ -125,6 +125,8 @@ export default {
             choices.forEach(choice =>{
                 const number = choice.dataset['number']
                 choice.innerText = this.currentQuestion['choice'+number]
+                if(choice.innerText==='undefined') choice.parentElement.style.display = 'none'
+                else choice.parentElement.style.display = 'flex'
             })
 
             this.availableQuestion.splice(questionIndex,1)
@@ -169,14 +171,7 @@ export default {
         padding: 50px 70px 0;
         min-width: 480px;
     }
-    .flex-colum{
-        display: flex;
-        flex-direction: column;
-    }
-    .flex-center{
-        justify-content: center;
-        align-items: center;
-    }
+    
     .justify-center{
         justify-content: center;
     }

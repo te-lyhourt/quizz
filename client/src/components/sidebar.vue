@@ -2,7 +2,6 @@
   <div class="sidebar">
       <ul class="nav_list">
           
-        
         <li>
           <a href="#">
             <i class='bx bxs-message-rounded-add'></i>

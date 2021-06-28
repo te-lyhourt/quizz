@@ -103,7 +103,7 @@ a{
 }
 .right{
   margin-top: 120px;
-  margin-left: 70px;
+  margin-left: 120px;
 }
 @media only screen and (max-width: 992px){
   .title{
