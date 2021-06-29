@@ -43,8 +43,8 @@
       </div>
       <board v-if="questionBoard" v-on:getClick="questionBoard=false" @choose="CheckType"></board>
       
-      <truefale v-if="truefale" v-on:getClick="truefale=false" @questoinSent="saveQuestion"></truefale>
-      <multiple v-if="multiple" v-on:getClick="multiple=false" @questoinSent="saveQuestion"></multiple>
+      <truefale v-if="truefale" @getClick="truefale=false" @questoinSent="saveQuestion"></truefale>
+      <multiple v-if="multiple" @getClick="multiple=false" @questoinSent="saveQuestion"></multiple>
     </div>
 
   </div>
@@ -73,13 +73,7 @@ export default {
       max: maxdateTime,
 
       quiz:{
-        questions:[
-          {
-            questionTitle:'',
-            type:'',
-            answer:[],
-          }
-        ],
+        questions:[],
         dueDate: '',
         createdDate: dateTime,
       }
@@ -114,6 +108,12 @@ export default {
     },
     saveQuestion(value){
       console.log(value)
+      this.quiz.questions.push(value)
+      // const choices = value.choices;
+      // for(let i = 0 ;i<choices.length;i++){
+      //   console.log("choice"+i+":"+choices[i])
+      // }
+
     },
     addZero(input){
       if(input<10){
@@ -137,7 +137,7 @@ export default {
     font-size: 1.15rem;
   }
   .box {
-    margin: 60px auto;
+    margin: 60px auto ;
     text-align: center;
     width: 50%;
     padding: 30px 70px;

@@ -4,7 +4,7 @@
             <div id="hud">
                 <div class="hud-item">
                     <p id="progressText" ref="progressText" class="hud-prefix">
-                        Question {{questionCounter}} of 4
+                        Question {{questionCounter}} of {{maxQuestion}}
                     </p>
                     <div id="progressBar">
                         <div id="progressBarFull" ref="progressBarFull">
@@ -43,11 +43,7 @@
 </template>
 <script>
 
-// const question = document.querySelector('#question');
 
-// const progressText = document.querySelector('#progressText');
-// const scoreText = document.querySelector('#score');
-// const progressBarFull = document.querySelector('#progressBarFull');
 
 import router from '../../router/router'
 export default {
@@ -59,6 +55,7 @@ export default {
             score : 0,
             questionCounter : 0,
             availableQuestion : [],
+            maxQuestion: '',
             questions : [
                 {
                     question : 'human can fly',
@@ -71,10 +68,10 @@ export default {
                 {
                     question : 'what is 2 + 4 ?',
                     choice1 : '22',
-                    choice2 : '6',
-                    choice3 : '17',
+                    choice2 : '',
+                    choice3 : '6',
                     choice4 : '21',
-                    answer :2,
+                    answer :3,
                 },
                 {
                     question : 'what is 100% - 4% ?',
@@ -92,11 +89,29 @@ export default {
                     choice4 : '21',
                     answer :2,
                 },
+                {
+                    question : 'what is 23 + 2 ?',
+                    choice1 : '2',
+                    choice2 : '25',
+                    choice3 : '17',
+                    choice4 : '21',
+                    answer :2,
+                },
+                {
+                    question : 'what is 23 + 2 ?',
+                    choice1 : '2',
+                    choice2 : '25',
+                    choice3 : '17',
+                    choice4 : '21',
+                    answer :2,
+                },
+
             ]
         }
     },
     mounted() {
         document.title = "Quiz Page";
+        this.maxQuestion = this.questions.length
         this.startGame()
     },
     methods: {
@@ -107,7 +122,7 @@ export default {
             this.getNewQuestion()
         },
         getNewQuestion () {
-            const MAX_QUESTION = 4
+            const MAX_QUESTION = this.maxQuestion
 
             if(this.availableQuestion.length === 0 || this.questionCounter > MAX_QUESTION){
                 localStorage.setItem('mostRecentScore',this.score);
@@ -120,12 +135,13 @@ export default {
 
             const questionIndex = Math.floor(Math.random() * this.availableQuestion.length)
             this.currentQuestion = this.availableQuestion[questionIndex]
+            
             this.$refs.question.innerText = this.currentQuestion.question
             const choices = Array.from(this.$el.querySelectorAll('.choice-text'));
             choices.forEach(choice =>{
                 const number = choice.dataset['number']
                 choice.innerText = this.currentQuestion['choice'+number]
-                if(choice.innerText==='undefined') choice.parentElement.style.display = 'none'
+                if(choice.innerText==='undefined' || choice.innerText==='') choice.parentElement.style.display = 'none'
                 else choice.parentElement.style.display = 'flex'
             })
 

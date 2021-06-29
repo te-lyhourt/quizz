@@ -1,6 +1,6 @@
 <template v-html="html">
   <div>
-    <form class="box popUp" id="popUp" :class="{ active: isActive }" >
+    <form class="box popUp" id="popUp" :class="{ active: isActive }" @submit.prevent="saveQuestion" >
       <div class="top">
           <button class="x" data-close-button @click="getClick" >&times;</button>
       </div>
@@ -26,7 +26,7 @@
 
               <label class="switch">
                 
-                <input type="checkbox" @click="answer1.correct=!answer1.correct">
+                <input type="checkbox" @click="rightAnswer(1)" class="checkbox">
                 <span class="slider round"></span>
               </label>
             </div>
@@ -40,7 +40,7 @@
               
               <label class="switch">
                 
-                <input type="checkbox" @click="answer2.correct=!answer2.correct">
+                <input type="checkbox" @click="rightAnswer(2)" class="checkbox">
                 <span class="slider round" ></span>
               </label>
             </div>
@@ -58,7 +58,7 @@
 
               <label class="switch">
                 
-                <input type="checkbox" @click="answer3.correct=!answer3.correct">
+                <input type="checkbox" @click="rightAnswer(3)" class="checkbox">
                 <span class="slider round"></span>
               </label>
             </div>
@@ -72,7 +72,7 @@
               
               <label class="switch">
                 
-                <input type="checkbox" @click="answer4.correct=!answer4.correct">
+                <input type="checkbox" @click="rightAnswer(4)" class="checkbox" >
                 <span class="slider round"></span>
               </label>
             </div>
@@ -81,7 +81,9 @@
         </div>
         
       </div>
-      <button class="btn btn-dark button-text" @click="saveQuestion">done</button>
+      <button class="btn btn-dark button-text done"  type="submit">Done</button>
+      <p class="error" > {{error}} </p>
+
     </form>
     <div id="overlay" :class="{ active: isActive }"></div>
   </div>
@@ -90,29 +92,21 @@
 
 
 export default {
-  props:["id","questionTitle","answer"],
+  el : '#popUp',
+  props:["id","questionTitle"],
+
   data() {
     return {
-      qustionID:'',//will get from parent if user want to edit , so after edit we know where to return
+      error:'',
       isActive: true,
       type:'multiple',
       question:'',
-      answer1:{
-        answer:'',
-        correct:false,
-      },
-      answer2:{
-        answer:'',
-        correct:false,
-      },
-      answer3:{
-        answer:'',
-        correct:false,
-      },
-      answer4:{
-        answer:'',
-        correct:false,
-      },
+
+      choice1 : '',
+      choice2 : '',
+      choice3 : '',
+      choice4 : '',
+      answer :'',
     };
   },
   methods: {
@@ -121,49 +115,126 @@ export default {
       this.$emit('getClick')
     },
     saveQuestion(){
-      alert("multi")
-      this.isActive = false;
-      const answer=[]
-      if(this.answer1.answer!=''){
-     
-        answer.push(this.answer1)
-      }
-      if(this.answer2.answer!=''){
-        answer.push(this.answer2)
-      }
-      if(this.answer3.answer!=''){
-        answer.push(this.answer3)
-      }
-      if(this.answer4.answer!=''){
-        answer.push(this.answer4)
-      }
-      const quiz = {
-        questionTitle : this.question,
-        type : this.type,
-        answer: answer
-      }
-      this.$emit("questoinSent",quiz)
 
+      const choice=[]
+
+      if(this.choice1!=''){
+        choice.push(this.choice1)
+      }
+      if(this.choice2!=''){
+        choice.push(this.choice2)
+      }
+      if(this.choice3!=''){
+        choice.push(this.choice3)
+      }
+      if(this.choice4!=''){
+        choice.push(this.choice4)
+      }
+      if(choice.length<=1){
+        this.error = "error: must create at least 2 answer"
+
+      }
+      if(this.answer===''){
+        this.error = "error: must choice right answer"
+
+      }
+      var save = false;
+
+      if(choice.length>1 && this.question!=='' &&this.answer!=='' ){
+        if(this.answer==1 && this.choice1!==''){
+          
+          save = true
+        }
+        if(this.answer==2 && this.choice2!==''){
+          
+          save = true
+        }
+        if(this.answer==3 && this.choice3!==''){
+          
+          save = true
+        }
+        if(this.answer==4 && this.choice4!==''){
+          
+          save = true
+        }
+        else this.error = "error: right answer choice but no content"
+      
+      }
+
+      if(save){
+        
+        const question = {
+          question : this.question,
+          choice1:this.choice1,
+          choice2:this.choice2,
+          choice3:this.choice3,
+          choice4:this.choice4,
+          answer:this.answer
+        }
+
+        this.$emit("questoinSent",question)
+        this.getClick()
+      }
+      
     },
 
     setAnswer(answer){
 
       if(answer==1){
         const span = this.$refs.answer1.innerHTML;        
-        this.answer1.answer = span;
+        
+        this.choice1 = span;
       }
       if(answer==2){
         const span = this.$refs.answer2.innerHTML;
-        this.answer2.answer = span;
+        
+        this.choice2 = span;
       }
       if(answer==3){
         const span = this.$refs.answer1.innerHTML;
-        this.answer3.answer = span;
+        
+        this.choice3 = span;
       }
       if(answer==4){
         const span = this.$refs.answer4.innerHTML;
-        this.answer4.answer = span;
+        
+        this.choice4 = span;
       }
+    },
+    rightAnswer(answer){
+      const rightanswers = this.$el.querySelectorAll(".checkbox");
+      
+      const check = rightanswers[answer-1].checked
+      
+      if(check){
+        this.answer = answer
+        this.disableCheckBox()
+      }
+      if(!check){
+        this.answer = ''
+        this.enableCheckBox()
+      }
+      
+    },
+    
+    disableCheckBox(){
+      const answers = this.$el.querySelectorAll(".checkbox");
+      answers.forEach(answer=>{
+        if(answer.checked!=true){
+          answer.disabled = true ;
+        }
+      })
+    },
+    enableCheckBox(){
+      const answers = this.$el.querySelectorAll(".checkbox");
+
+      answers.forEach(answer=>{
+        if(answer.disabled == true){
+  
+          answer.disabled = false ;
+
+        }
+      })
     }
   },
   computed:{
@@ -178,16 +249,26 @@ export default {
   margin: 60px auto 20px;
   text-align: center;
   width: 80%;
-  padding: 30px 70px;
+  padding: 20px 70px 30px;
   background-color: #353535;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
   min-width: 480px;
+  max-width: 850px;
 }
-
+.error{
+  color: red;
+  margin-top: 20px;
+  font-size: 1.25rem;
+  
+}
+.done{
+  margin-top: 20px;
+  border:  solid #767676 0.90px;
+}
 .top {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .cancel {
   float: left;
@@ -217,7 +298,7 @@ a:hover {
 .bottom {
   display: flex;
   flex-direction: column;
-  text-align: left;
+  text-align: center;
 }
 .row {
   display: flex;
@@ -265,6 +346,7 @@ a:hover {
   width: 0;
   height: 0;
 }
+
 .slider {
   position: absolute;
   cursor: pointer;
@@ -286,6 +368,11 @@ a:hover {
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
+}
+
+input:disabled + .slider{
+  background-color: black;
+  box-shadow: black;
 }
 
 input:checked + .slider {
@@ -368,6 +455,7 @@ input:checked + .slider:before {
   border: none;
   font-size: 1.5rem;
 }
+
 @media (max-width: 490px) {
 
   .answerCol{
