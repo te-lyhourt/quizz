@@ -1,18 +1,43 @@
 <template v-html="html">
-    <a href="">
+    <div>
         <div class="questionbox">
-            <span class="question">{{question}}</span>
-            
-            <span class="type">
-                type: {{type}}
-            </span>
+            <span class="question">{{question.question}}</span>
+            <div class="feature">
+                <div class="edit">
+                    <button class="empty-btn" @click="edit()">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    
+                </div>
+                <div class="delete">
+                    <button class="empty-btn">
+                        <i class="fas fa-trash-alt" @click="deleteQuestion()"></i>
+                    </button>
+                    
+                </div>
+                
+            </div>
         </div>
-    </a>
+
+        
+    </div>
+    
     
 </template>
 <script>
 export default {
-    props:["question","type"]
+    props:["question"],
+    data() {
+        return {
+            id:this.question.id,
+
+        }
+    },
+    methods: {
+        deleteQuestion(){
+            this.$emit("deleteQuestion",this.question.id)
+        }
+    },
 }
 </script>
 <style scoped>
@@ -37,12 +62,28 @@ export default {
         white-space: nowrap;
         text-overflow: ellipsis;
     }
-    .type{
+    .feature{
         float: right;
+        display: flex;
+    }
+    .edit{
+        margin-right: 10px;
     }
     a:hover{
         text-shadow: none;
         color: white;
         text-decoration: none;
     }
+    .empty-btn{
+        background: none;
+        outline: none;
+        border: none;
+        color: white;
+    }
+    .empty-btn:hover{
+        text-shadow: 0 0 10px #03bcf4,
+        0 0 20px #03bcf4,
+        0 0 40px #03bcf4 ;
+    }
+    
 </style>

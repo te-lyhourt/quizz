@@ -30,16 +30,21 @@
         
       </div>
       <div class="bottom">
-        <p style="margin-top:20px;">Quesions</p>
+        <div  class="question-top">
+          Quesions
+          <button class="btn btn-dark addQuestion" type="button" @click="questionBoard=true" >Add quesion</button>
+        </div>
+        
+        
+        
+        
         <div class="question-area" @questoinSent="getQuestion" >
           <div v-if="noQuestion">no question yet</div>
           <div v-if="!noQuestion">
-            <questionBox  v-for="quistion in quiz.questions" :key="quistion.id" :question="quistion.questionTitle" :type="quistion.type"></questionBox>
+            <questionBox  v-for="quistion in quiz.questions" :key="quistion.id" :question="quistion" @deleteQuestion="deleteQuestion"></questionBox>
           </div>
           
         </div>
-        
-        <button class="btn btn-dark addQuestion" type="button" @click="questionBoard=true" >Add quesion</button>
       </div>
       <board v-if="questionBoard" v-on:getClick="questionBoard=false" @choose="CheckType"></board>
       
@@ -108,11 +113,9 @@ export default {
     },
     saveQuestion(value){
       console.log(value)
+      let id = this.quiz.questions.length+1;
+      value.id = id
       this.quiz.questions.push(value)
-      // const choices = value.choices;
-      // for(let i = 0 ;i<choices.length;i++){
-      //   console.log("choice"+i+":"+choices[i])
-      // }
 
     },
     addZero(input){
@@ -121,10 +124,21 @@ export default {
       }
       return input;
     },
+    deleteQuestion(value){
+      var questions = this.quiz.questions;
+      //splice out the delete question
+      questions.splice(value-1,1)
+
+      //change question id after delete element
+      for(let i =0;i<questions.length;i++){
+
+        questions[i].id = i+1
+      }
+    }
   },
   computed:{
     noQuestion(){
-      if( typeof  this.quiz.question == 'undefined') return true
+      if( typeof  this.quiz.questions == 'undefined') return true
       else return false
     }
   }
@@ -210,7 +224,7 @@ export default {
   }
   .date{
     margin-right: 20px;
-    margin-bottom: 0;
+    margin-bottom: 20px;
     display: block;
 
   }
@@ -234,6 +248,14 @@ export default {
   input:not(:placeholder-shown):valid.date{
     display: inline;
     width: 85%;
+  }
+  .question-top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 1.15rem;
+
   }
   @media screen and (max-width: 480px) {
     .text {

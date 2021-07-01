@@ -93,7 +93,9 @@ export default {
           question : this.question,
           choice1:true,
           choice2:false,
-          answer:this.answer
+          answer:this.answer,
+          type: this.type,
+          id:''
         }
 
         this.$emit("questoinSent",question)

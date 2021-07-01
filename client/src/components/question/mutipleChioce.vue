@@ -169,7 +169,9 @@ export default {
           choice2:this.choice2,
           choice3:this.choice3,
           choice4:this.choice4,
-          answer:this.answer
+          answer:this.answer,
+          type:this.type,
+          id:''
         }
 
         this.$emit("questoinSent",question)
