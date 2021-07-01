@@ -45,8 +45,6 @@
               </label>
             </div>
             <span ref="answer2" class="answer" role="textbox" contenteditable required="required" @keyup="setAnswer(2)"></span>
-            
-        
           </div>
         </div>
         <div class="row">
@@ -93,10 +91,39 @@
 
 export default {
   el : '#popUp',
-  props:["id","questionTitle"],
+  props:["questionEdit"],
+  mounted() {
+    
+    if(typeof  this.questionEdit !== 'undefined'){
+      const edit = this.questionEdit
+      //set question
+      this.question = edit.question
+      //index of right answer
+      const index = edit.answer
+      //get all check
+      const rightanswers = this.$el.querySelectorAll(".checkbox");
+      //set the right answer to check
+      rightanswers[index-1].checked = true
+      this.rightAnswer(index)
+      //set question id
+      this.questionId = edit.id
+      //set choice 
+      let choices = this.$el.querySelectorAll(".answer")
 
+      this.choice1 = choices[0].innerHTML = edit['choice'+1]
+      this.choice2 = choices[1].innerHTML = edit['choice'+2]
+      this.choice3 = choices[2].innerHTML = edit['choice'+3]
+      this.choice4 = choices[3].innerHTML = edit['choice'+4]
+      
+    }
+  },
+  computed:{
+    
+  },
   data() {
     return {
+      questionId:'',
+      edit:false,
       error:'',
       isActive: true,
       type:'multiple',
@@ -162,7 +189,6 @@ export default {
       }
 
       if(save){
-        
         const question = {
           question : this.question,
           choice1:this.choice1,
@@ -173,8 +199,16 @@ export default {
           type:this.type,
           id:''
         }
+        //for create question
+        if(typeof  this.questionEdit === 'undefined'){
+          this.$emit("questoinSent",question)
+        }
+        //for edit question
+        if(typeof  this.questionEdit !== 'undefined'){
+          question.id = this.questionId
+          this.$emit("sendEdit",question)
+        }
 
-        this.$emit("questoinSent",question)
         this.getClick()
       }
       
@@ -193,7 +227,7 @@ export default {
         this.choice2 = span;
       }
       if(answer==3){
-        const span = this.$refs.answer1.innerHTML;
+        const span = this.$refs.answer3.innerHTML;
         
         this.choice3 = span;
       }
@@ -239,10 +273,6 @@ export default {
       })
     }
   },
-  computed:{
-
-    
-  }
 };
 </script>
 

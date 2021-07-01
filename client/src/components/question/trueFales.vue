@@ -59,10 +59,28 @@
 export default {
 
   el : '#popUp',
-  props:["id","questionTitle"],
-  
+  props:["questionEdit"],
+  mounted() {
+    
+    if(typeof  this.questionEdit !== 'undefined'){
+      const edit = this.questionEdit
+      //set question
+      this.question = edit.question
+      //index of right answer
+      const index = edit.answer
+      //get all check
+      const rightanswers = this.$el.querySelectorAll(".checkbox");
+      //set the right answer to check
+      rightanswers[index-1].checked = true
+      this.rightAnswer(index)
+      //set question id
+      this.questionId = edit.id
+    }
+  },
   data() {
     return {
+      questionId:'',
+      edit:false,
       error:'',
       isActive: true,
       type:'truefalse',
@@ -97,8 +115,15 @@ export default {
           type: this.type,
           id:''
         }
-
-        this.$emit("questoinSent",question)
+        //for create question
+        if(typeof  this.questionEdit === 'undefined'){
+          this.$emit("questoinSent",question)
+        }
+        //for edit question
+        if(typeof  this.questionEdit !== 'undefined'){
+          question.id = this.questionId
+          this.$emit("sendEdit",question)
+        }
         this.getClick()
       }
       

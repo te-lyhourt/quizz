@@ -4,7 +4,7 @@
             <span class="question">{{question.question}}</span>
             <div class="feature">
                 <div class="edit">
-                    <button class="empty-btn" @click="edit()">
+                    <button class="empty-btn" @click="editQuestion()">
                         <i class="fas fa-edit"></i>
                     </button>
                     
@@ -19,23 +19,44 @@
             </div>
         </div>
 
-        
+        <truefale v-if="truefale" @getClick="truefale=false" @sendEdit="sendEdit" :questionEdit="question"></truefale>
+        <multiple v-if="multiple" @getClick="multiple=false" @sendEdit="sendEdit" :questionEdit="question"></multiple>
     </div>
     
     
 </template>
 <script>
+import truefale from '../question/trueFales.vue'
+import multiple from '../question/mutipleChioce.vue'
+
 export default {
     props:["question"],
+     components:{
+        multiple,
+        truefale,
+    },
     data() {
         return {
             id:this.question.id,
-
+            multiple:'',
+            truefale:''
         }
     },
     methods: {
         deleteQuestion(){
-            this.$emit("deleteQuestion",this.question.id)
+            let respone = confirm("do you really want to delete question : " + this.question.question)
+            if(respone){
+                this.$emit("deleteQuestion",this.question.id)
+            }
+            
+        },
+        editQuestion(){
+            const type =  this.question.type
+            if(type=="multiple") this.multiple = true
+            if(type=="truefalse") this.truefale = true
+        },
+        sendEdit(value){
+            this.$emit("editQuestion",value);
         }
     },
 }

@@ -1,17 +1,19 @@
 <template v-html="html">
   <div>
     <brand></brand>
-    <div class="box">
+    <form class="box" @submit.prevent="saveQuiz()">
       <div class="top">
-        <a href="" class="cancel" style="font-size:1.25rem">Cancel</a>
+        <a href="/" class="cancel" style="font-size:1.25rem">Cancel</a>
         <span style="font-size:1.5rem">Create Quiz</span>
-        <a href="" class="save" style="font-size:1.25rem">Save</a>
+        <button class="save empty-btn" type="submit" style="font-size:1.25rem">Save</button>
       </div>
       <div class="mid">
         <p>Title</p>
-         <input class="long-box" name="title" required="required" maxlength="20" placeholder="Add Title" /> <br/>
+         <input class="long-box" name="title" required maxlength="20" placeholder="Add Title" 
+         v-model="title"/> <br/>
         <p>Description</p>
-        <textarea class="long-box" name="description" required="required" maxlength="280" rows="3" placeholder="Add Decription"/> <br/>
+        <textarea class="long-box" name="description" maxlength="280" rows="3" placeholder="Add Decription"
+        v-model="description"/> <br/>
         
         <p>Due Date</p>
         
@@ -33,15 +35,18 @@
         <div  class="question-top">
           Quesions
           <button class="btn btn-dark addQuestion" type="button" @click="questionBoard=true" >Add quesion</button>
+          
+        </div>
+        <div style="text-align:center;">
+          <p class="error">{{error}}</p>
         </div>
         
-        
-        
-        
-        <div class="question-area" @questoinSent="getQuestion" >
+        <div class="question-area"  >
           <div v-if="noQuestion">no question yet</div>
           <div v-if="!noQuestion">
-            <questionBox  v-for="quistion in quiz.questions" :key="quistion.id" :question="quistion" @deleteQuestion="deleteQuestion"></questionBox>
+            <questionBox  v-for="quistion in quiz.questions" :key="quistion.id" :question="quistion" 
+            @deleteQuestion="deleteQuestion"
+            @editQuestion="editQuestion"></questionBox>
           </div>
           
         </div>
@@ -50,7 +55,7 @@
       
       <truefale v-if="truefale" @getClick="truefale=false" @questoinSent="saveQuestion"></truefale>
       <multiple v-if="multiple" @getClick="multiple=false" @questoinSent="saveQuestion"></multiple>
-    </div>
+    </form>
 
   </div>
 </template>
@@ -76,11 +81,13 @@ export default {
       multiple:"",
       truefale:"",
       max: maxdateTime,
-
+      error:'',
       quiz:{
         questions:[],
         dueDate: '',
         createdDate: dateTime,
+        title:'',
+        description:''
       }
       
     }
@@ -94,23 +101,19 @@ export default {
     truefale,
   },
   methods: {
-    // checkTime(){
-    //   const minArray = this.min.split("T");
-    //   const dueDate = this.dueDate.split("T");
-      
-    //   alert(this.min+' '+this.dueDate);
-    // },
+    saveQuiz(){
+      const questions = this.quiz.questions
+      if(questions.length==0){
+        this.error = "must add question before save"
+      }
+    },
     CheckType(value){
       this.questionBoard=false
 
       if(value=="truefale") this.truefale = true;
       if(value=="multiple") this.multiple = true;
     },
-    getQuestion(){
-      alert("getCall")
-      
 
-    },
     saveQuestion(value){
       console.log(value)
       let id = this.quiz.questions.length+1;
@@ -134,6 +137,10 @@ export default {
 
         questions[i].id = i+1
       }
+    },
+    editQuestion(value){
+      const question = this.quiz.questions.find(question => question.id == value.id)
+      console.log(question)
     }
   },
   computed:{
@@ -166,7 +173,8 @@ export default {
     border-radius: 5px;
     resize: none;
     background: white;
-    color: #767676;
+    width: 100%;
+    margin-bottom: 20px;
     font-size: 1rem;
   }
   .top{
@@ -179,6 +187,12 @@ export default {
     float: right;
    
   }
+  .empty-btn{
+    background: none;
+    outline: none;
+    border: none;
+    color: white;
+  }
   .save:hover,.cancel:hover{
     text-shadow: 0 0 10px #03bcf4,
         0 0 20px #03bcf4,
@@ -190,10 +204,7 @@ export default {
     margin-top: 10px;
     text-align: left;
   }
-  .long-box {
-    width: 100%;
-    margin-bottom: 20px;
-  }
+
 
   a{
     color: white;
@@ -226,7 +237,6 @@ export default {
     margin-right: 20px;
     margin-bottom: 20px;
     display: block;
-
   }
   span::before{
     display: none;
@@ -256,6 +266,11 @@ export default {
     margin: 10px 0;
     font-size: 1.15rem;
 
+  }
+  .error{
+    color: red;
+    margin-top: 20px;
+    font-size: 1.25rem;
   }
   @media screen and (max-width: 480px) {
     .text {

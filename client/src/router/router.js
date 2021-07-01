@@ -42,7 +42,8 @@ const routes = [
         path:'/endquiz',
         name:'endquiz',
         component: endQuiz
-    }
+    },
+
 ]
 
 const router = createRouter({
