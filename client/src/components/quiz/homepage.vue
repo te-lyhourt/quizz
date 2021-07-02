@@ -5,12 +5,12 @@
         <div class="left">
           <sidebar></sidebar>
         </div>
-        <div class="right">
+        <div class="right" v-if="logIn">
           <div class="top">
             <span class="title">
                 My Quizes
             </span>
-            <a href="/createquiz"><button class="btn btn-dark button-text">Create quiz</button></a>
+            <button class="btn btn-dark button-text" @click="goCreateQuiz()">Create quiz</button>
           </div>
           <div class="quiz row">
             <quiz-box></quiz-box>
@@ -29,6 +29,7 @@ import Navbar from '../navbar.vue';
 import Sidebar from '../sidebar.vue';
 import axios from 'axios'
 import QuizBox from './quizBox.vue';
+import router from '../../router/router'
 
 export default {
   data() {
@@ -38,16 +39,33 @@ export default {
     }
   },
   async mounted() {
-    const response = await axios.get('http://localhost:8080/homepage');
-    console.log(response)
-    if(response.data.login){
-      this.logIn = true;
+    // alert("get call")
+    this.checkUser();
 
-      this.userName = response.data.userName;
-    }
-    else{
-      this.logIn = false;
-    }
+  },
+  methods: {
+    //check if user is already log in
+    async checkUser(){
+      const response = await axios.get('http://localhost:8080/homepage')
+     
+      if(response.data.login){
+        this.logIn = true;
+
+        this.userName = response.data.userName;
+      }
+      else{
+        this.logIn = false;
+      }
+    },
+    goCreateQuiz(){
+      if(this.logIn){
+        router.push({name:"createquiz"})
+      }
+      else{
+        router.push({name:"logIn"})
+      }
+    },
+
   },
   components: {
     QuizBox,

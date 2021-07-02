@@ -15,6 +15,10 @@ const userSchema = new Schema({
     type: String,
     min:3,
     required: true
+  },
+  type:{
+    type:String,
+    required:true
   }
 }, {collection: 'users'});
 

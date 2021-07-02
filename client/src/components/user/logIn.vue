@@ -54,19 +54,12 @@ export default {
     },
     methods: {
         logIn(){
-            // const user =  this.$store.getters.userLogIn(this.input)
-            // alert(user)
-            // if(user==undefined){
-            //     this.notFound = true
-            //     alert('not found')
-            // }
-            // else if (user.userEmail == this.input.email, user.password == this.input.password){
-            //     alert('log in')
-            // }
+
             axios.post('http://localhost:8080/logIn',
             {
                 userEmail : this.email,
                 password : this.password,
+                
             })
             .then( (result) => {
                 if(result.data.passwordIsMatch){
@@ -92,7 +85,6 @@ export default {
             else{
                 this.popUp = false
             }
-            
         }
         
     },

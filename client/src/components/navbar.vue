@@ -9,12 +9,13 @@
       <ul class="navbar-nav ml-auto">
           
           <li class="nav-item">
-            <a v-if="login" class="nav-link" href="">
-              <button type="button" class="btn btn-outline-dark button-text">{{username}}</button>
-            </a>
+            <div v-if="login">
+              <div type="button" class="btn btn-outline-dark button-text">{{username}}</div>
+              <button type="button" class="btn btn-outline-dark button-text logout" @click="logout()">log out</button>
+            </div>
+            
             <a v-if="!login" class="nav-link" href="/logIn">
               <button type="button" class="btn btn-outline-dark button-text">Join</button>
-              
             </a>
           </li>
         </ul>
@@ -23,13 +24,27 @@
 </template>
 <script>
 
+import axios from 'axios'
 export default {
   props:["username","login"],
+  methods: {
+    async logout(){
+
+      const result = await axios.get('http://localhost:8080/logOut')
+      
+      if(result.data.logout){
+        //relaod home page after log out
+        location.reload();
+      }
+      
+      
+    }
+  },
 };
 </script>
 
 <style scoped>
-    
+
     .navbar
     {
       position: fixed;
@@ -88,6 +103,9 @@ export default {
     .navbar-toggler{
         background: white;
 
+    }
+    .logout{
+      margin-left: 10px
     }
     /* bootstrapcdn CDN Link */
   @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css");

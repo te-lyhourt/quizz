@@ -115,16 +115,13 @@ export default {
   },
   methods: {
     submitSignUp() {
-      // this.$store.dispatch("addUser", {
-      //   userName: this.userName,
-      //   userEmail: this.email,
-      //   password: this.password,
-      // });
+
       axios.post('http://localhost:8080/signUp',
       {
         userEmail : this.userEmail,
         password : this.password,
         userName : this.userName,
+
       })
       .then( (result) => {
         if(result.data.errorEmail){

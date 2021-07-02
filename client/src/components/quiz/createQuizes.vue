@@ -38,6 +38,7 @@
           
         </div>
         <div style="text-align:center;">
+          <!-- this error will pop up when user saving the quiz without adding question -->
           <p class="error" v-if="noQuestion">{{error}}</p>
         </div>
         
@@ -87,7 +88,8 @@ export default {
         dueDate: '',
         createdDate: dateTime,
         title:'',
-        description:''
+        description:'',
+        creater:''
       }
       
     }
@@ -145,7 +147,9 @@ export default {
   },
   computed:{
     noQuestion(){
+      // return true if there is not question yet in quiz.questions
       if( this.quiz.questions.length === 0) return true
+      //else return false
       else return false
     }
   }

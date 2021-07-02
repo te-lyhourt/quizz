@@ -31,7 +31,6 @@ exports.createUser = (req,res)=>{
                 }).save().then(result=>{
 
                     console.log("uploaded user")
-                    // res.redirect('http://localhost:8080/logIn')
 
                     return res.send({errorEmail : false})
 
@@ -54,8 +53,7 @@ exports.createUser = (req,res)=>{
 exports.checkUser = (req,res)=>{
     const email = req.body.userEmail;
     const password = req.body.password;
-    console.log(email)
-    console.log(password)
+
 
     User.find({email: email}).then(result => {
        
@@ -71,29 +69,24 @@ exports.checkUser = (req,res)=>{
             bcrypt.compare(password, result[0].password, function(err, passwordIsMatch) {
                 if(passwordIsMatch) {
                   res.cookie('username', result[0].name, {
-                      maxAge: 86400 * 1000, // 24h
-                      httpOnly: true
+                    maxAge: 86400 * 1000, // 24h
+                    httpOnly: true
                   })
                   res.cookie('userType', result[0].type, {
-                      maxAge: 86400 * 1000, // 24h
-                      httpOnly: true
+                    maxAge: 86400 * 1000, // 24h
+                    httpOnly: true
                   })
                   res.cookie('userID', result[0]._id, {
-                      maxAge: 86400 * 1000, // 24h
-                      httpOnly: true
+                    maxAge: 86400 * 1000, // 24h
+                    httpOnly: true
                   })
-                  if(result[0].type=="user"){
-                      res.redirect("/");
-                  }else if(result[0].type=="admin"){
-                      res.redirect("/admin");
-                  }
                   console.log("right password")
-                  return res.send({passwordIsMatch : true})
-  
+                  return res.json({passwordIsMatch : true,userType: result[0].type})
+
                 } else {
                   // wrong password
                   console.log("wrong password")
-                  return res.send({passwordIsMatch : false})
+                  return res.json({passwordIsMatch : false})
                 }
               })
         }
@@ -162,22 +155,34 @@ exports.createAmine= (req,res)=>{
 }
 
 const getAppCookies = (req) => {
-    //cookie : "userType=undefined; username=adssadsadads; userID=j%3A%2260b79335c8987e336cc68762%22"
+    
 
-    // We extract the raw cookies from the request headers
-    const rawCookies = req.headers.cookie.split('; ');
-    // rawCookies = ['userType=undefined', 'username=adssadsadads','userID=j%3A%2260b79335c8987e336cc68762%22"']
-   
-    const parsedCookies = {};
-    rawCookies.forEach(rawCookie=>{
-    const parsedCookie = rawCookie.split('=');
-    // parsedCookie = {['userType', 'undefined'], ['username', 'adssadsadads'] , ['userID','j%3A%2260b79335c8987e336cc68762%22']}
-     
-     parsedCookies[parsedCookie[0]] = parsedCookie[1];
-    //  parsedCookie = {userType: 'undefined', username: 'adssadsadads',userID: 'j%3A%2260b79335c8987e336cc68762%22'}
-    });
+    if(req.headers.cookie!== undefined){
+        
+        // We extract the raw cookies from the request headers 
+        // req.hears.cookie = username=fafdass; userType=user; userID=j%3A%2260dec8d4c0df7743cc0b46f9%22
+        // important : space after ; is require in function split
+        const rawCookies = req.headers.cookie.split('; ');
+        // rawCookies = ['userType=undefined', 'username=adssadsadads','userID=j%3A%2260b79335c8987e336cc68762%22"']
 
-    return parsedCookies;
+      
+        const parsedCookies = {};
+        rawCookies.forEach(rawCookie=>{
+ 
+            const parsedCookie = rawCookie.split('=');
+
+            // parsedCookie = {['userType', 'undefined'], ['username', 'adssadsadads'] , ['userID','j%3A%2260b79335c8987e336cc68762%22']}
+        
+            parsedCookies[parsedCookie[0]] = parsedCookie[1];
+
+            //  parsedCookie = {userType: 'undefined', username: 'adssadsadads',userID: 'j%3A%2260b79335c8987e336cc68762%22'}
+        });
+
+        return parsedCookies;
+    }
+    else return {}
+
+    
 };
 
 exports.loginCheck = (req,res)=>{
@@ -187,12 +192,13 @@ exports.loginCheck = (req,res)=>{
 
     const userID = cookie.userID;
 
-    // console.log(req.cookies.userID)
-    if(userID.length!=0){
-        login = true
-    }else{
+    if(userID === undefined || userID.length===0){
         login = false
     }
+    else if(userID.length!=0){
+        login = true
+    }
+    
     
     if(login) {
         const userName = cookie.username;
@@ -201,20 +207,11 @@ exports.loginCheck = (req,res)=>{
     }
     else return res.json({login})
     
-    // Quiz.find().sort({ _id: -1 }).then(products=>{
-    //     if(Object.keys(products).length === 0) {
-    //         res.render('Home page',{flag:false,login})
-    //     }else{
-    //         res.render('Home page', {
-    //             productList: products,
-    //             flag : true,
-    //             login
-    //         })
-    //     }
-    // }
-    // ).catch(e=>{
-    //     console.log(e)
-    // })
-
-    
 }
+ exports.logOut= (req,res)=>{
+    res.clearCookie('username');
+    res.clearCookie('userID');
+    res.clearCookie('userType');
+    return res.json({logout:true})
+}
+
