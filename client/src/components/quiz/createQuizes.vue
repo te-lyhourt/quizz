@@ -38,11 +38,11 @@
           
         </div>
         <div style="text-align:center;">
-          <p class="error">{{error}}</p>
+          <p class="error" v-if="noQuestion">{{error}}</p>
         </div>
         
         <div class="question-area"  >
-          <div v-if="noQuestion">no question yet</div>
+          <div v-if="noQuestion">No question added yet</div>
           <div v-if="!noQuestion">
             <questionBox  v-for="quistion in quiz.questions" :key="quistion.id" :question="quistion" 
             @deleteQuestion="deleteQuestion"
@@ -145,7 +145,7 @@ export default {
   },
   computed:{
     noQuestion(){
-      if( typeof  this.quiz.questions == 'undefined') return true
+      if( this.quiz.questions.length === 0) return true
       else return false
     }
   }
