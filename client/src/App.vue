@@ -1,5 +1,5 @@
 <template>
-  <div class="a" style="height: 100%;">
+  <div class="root" >
     <router-view></router-view>
   </div>
 </template>
@@ -59,6 +59,8 @@ export default {
   #app{
     height: 100%;
   }
-
+  .root{
+    height: 100%;
+  }
   
 </style>

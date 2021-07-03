@@ -24,9 +24,10 @@ const routes = [
         component: signUp
     },
     {
-        path:'/createquiz',
+        path:'/createquiz/:id',
         name:'createquiz',
-        component: createquiz
+        component: createquiz,
+        props: true
     },
     {
         path:'/takequiz',

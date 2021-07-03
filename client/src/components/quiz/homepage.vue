@@ -5,13 +5,14 @@
         <div class="left">
           <sidebar></sidebar>
         </div>
+        
         <div class="right" v-if="logIn">
-          <div class="top">
+          
             <span class="title">
                 My Quizes
             </span>
-            <button class="btn btn-dark button-text" @click="goCreateQuiz()">Create quiz</button>
-          </div>
+            <button class="btn btn-dark button-text createQuiz" @click="goCreateQuiz()" >Create quiz</button>
+          
           <div class="quiz row">
             <quiz-box></quiz-box>
             <quiz-box></quiz-box>
@@ -20,7 +21,17 @@
             <quiz-box></quiz-box>
           </div>
         </div>
-        
+
+        <div class="right" style="text-align: center;" v-else>
+          <h1 class="welcome">
+            Welcome To Quizz! <i class="fas fa-pen "></i>
+          </h1>
+          <p class="welcome-text">logIn or signUp to continue</p>
+          <a href="/logIn" class="btn-link"><button class="btn btn-dark button-text welcom-btn" >LogIn</button></a>
+          <a href="/signUp" class="btn-link"><button class="btn btn-dark button-text welcom-btn" >SignUp</button></a>
+          
+        </div>
+
       </div>
   </div>
 </template>
@@ -36,6 +47,8 @@ export default {
     return {
       logIn:'',
       userName:'',
+      userID:'',
+      userType:''
     }
   },
   async mounted() {
@@ -51,7 +64,11 @@ export default {
       if(response.data.login){
         this.logIn = true;
 
-        this.userName = response.data.userName;
+        const user = response.data.user;
+        console.log(user)
+        this.userName = user.userName;
+        this.userID = user.userID;
+        this.userType = user.userType;
       }
       else{
         this.logIn = false;
@@ -59,7 +76,8 @@ export default {
     },
     goCreateQuiz(){
       if(this.logIn){
-        router.push({name:"createquiz"})
+        
+        router.push({path:`/createquiz/${this.userID}`})
       }
       else{
         router.push({name:"logIn"})
@@ -102,13 +120,9 @@ export default {
   background: #11101d;
   float: right;
 }
-a{
-  margin-top: 10px;
-  border-radius: 0 0 30px;
-  float: right;
-  margin-right: 150px;
-}
+
 .btn.button-text{
+  border-radius: 10px;
   font-size: 1.25rem;
   color: white;
   background: black;
@@ -120,16 +134,45 @@ a{
         0 0 40px #03bcf4 ;
 }
 .right{
+  width: 91%;
   margin-top: 120px;
   margin-left: 120px;
 }
+.createQuiz{
+  float: right;
+  margin-right: 150px;
+}
+.fa-pen{
+  font-size: 9vmin;
+}
+.welcome{
+  margin-top: 6%;
+  font-size: 11vmin;
+}
+.welcome-text{
+  margin: 3% 0;
+  font-size: 4.5vmin;
+}
+.btn.welcom-btn{
+  font-size: 5vmin;
+  width: 220px;
+  
+  margin: 20px auto;
+}
+.btn-link{
+  display: block;
+}
 @media only screen and (max-width: 992px){
+
   .title{
-    display: block;
+    display: inline-block;
   }
   .right{
+
+    margin-left: 100px;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
   a{
     float: none;
@@ -139,6 +182,14 @@ a{
   }
   .quiz.row{
     margin: 15px 60px 0 60px;
+  }
+  .welcom-btn{
+    width: 75%;
+    margin-top: 20px;
+  }
+  .createQuiz{
+    width: 75%;
+    margin-right: 0;
   }
 }
 </style>

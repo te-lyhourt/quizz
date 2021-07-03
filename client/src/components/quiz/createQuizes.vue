@@ -10,10 +10,10 @@
       <div class="mid">
         <p>Title</p>
          <input class="long-box" name="title" required maxlength="20" placeholder="Add Title" 
-         v-model="title"/> <br/>
+         v-model="quiz.title"/> <br/>
         <p>Description</p>
         <textarea class="long-box" name="description" maxlength="280" rows="3" placeholder="Add Decription"
-        v-model="description"/> <br/>
+        v-model="quiz.description"/> <br/>
         
         <p>Due Date</p>
         
@@ -66,8 +66,14 @@ import board from '../question/questionBoard'
 import questionBox from '../question/questionBox'
 import multiple from '../question/mutipleChioce.vue'
 import truefale from '../question/trueFales.vue'
+import axios from 'axios'
+// import router from '../../router/router'
 export default {
-  
+  // props:["userID"],
+  mounted() {
+    const id = window.location.pathname.split('/')[2].split('%22')[1]
+    this.quiz.creater = id
+  },
   data() {
     const current = new Date();
     const currentDate = current.getFullYear() +'-'+ this.addZero(current.getMonth()+1) +'-'+ this.addZero(current.getDate());
@@ -89,7 +95,7 @@ export default {
         createdDate: dateTime,
         title:'',
         description:'',
-        creater:''
+        creater:''     
       }
       
     }
@@ -108,6 +114,30 @@ export default {
       if(questions.length==0){
         this.error = "must add question before save"
       }
+      else{
+        console.log(this.quiz)
+        axios.post('http://localhost:8080/addQuiz',
+        {
+          quiz : this.quiz,
+        })
+        .then( (result) => {
+          console.log(result)
+          // if(result.data.errorEmail){
+          //   this.errorEmail = result.data.errorEmail
+          //   this.popUp = true;
+          //   this.message = "sign Up fail !!";
+          // }
+            
+          // else if(!result.data.errorEmail){
+          //   this.popUp = true;
+          //   this.errorEmail = false;
+          //   this.message = "successfully sign Up !!";
+          // }
+        },(error) => {
+          console.log(error);
+        })
+      }
+      
     },
     CheckType(value){
       this.questionBoard=false
@@ -117,7 +147,7 @@ export default {
     },
 
     saveQuestion(value){
-      console.log(value)
+      // console.log(value)
       let id = this.quiz.questions.length+1;
       value.id = id
       this.quiz.questions.push(value)

@@ -68,7 +68,7 @@ exports.checkUser = (req,res)=>{
             console.log("email found")
             bcrypt.compare(password, result[0].password, function(err, passwordIsMatch) {
                 if(passwordIsMatch) {
-                  res.cookie('username', result[0].name, {
+                  res.cookie('userName', result[0].name, {
                     maxAge: 86400 * 1000, // 24h
                     httpOnly: true
                   })
@@ -81,7 +81,7 @@ exports.checkUser = (req,res)=>{
                     httpOnly: true
                   })
                   console.log("right password")
-                  return res.json({passwordIsMatch : true,userType: result[0].type})
+                  return res.json({passwordIsMatch : true,user: result[0] })
 
                 } else {
                   // wrong password
@@ -201,9 +201,9 @@ exports.loginCheck = (req,res)=>{
     
     
     if(login) {
-        const userName = cookie.username;
+        const user = cookie;
   
-        return res.json({login,userName})
+        return res.json({login,user})
     }
     else return res.json({login})
     

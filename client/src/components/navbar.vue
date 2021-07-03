@@ -10,7 +10,7 @@
           
           <li class="nav-item">
             <div v-if="login">
-              <div type="button" class="btn btn-outline-dark button-text">{{username}}</div>
+              <!-- <div type="button" class="btn btn-outline-dark button-text">{{username}}</div> -->
               <button type="button" class="btn btn-outline-dark button-text logout" @click="logout()">log out</button>
             </div>
             
@@ -69,14 +69,14 @@ export default {
     }
     .navbar-nav
     {
-        border-radius: 0 0 30px;
-        float: right;
-        margin-right: 120px;
+      border-radius: 0 0 30px;
+      float: right;
+      margin-right: 120px;
     }
     .nav-item
     {
-        padding: 0 18px;
-        height: 100%;
+      padding: 0 18px;
+      height: 100%;
     }
     .nav-link.need-help
     {
@@ -107,6 +107,12 @@ export default {
     .logout{
       margin-left: 10px
     }
+    @media only screen and (max-width: 992px){
+      .navbar-nav{
+        margin-right: 10%;
+      }
+    }
+    
     /* bootstrapcdn CDN Link */
   @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css");
   @import url("https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.css");
