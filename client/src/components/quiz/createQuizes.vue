@@ -1,11 +1,11 @@
 <template v-html="html">
   <div>
     <brand></brand>
-    <form class="box" @submit.prevent="saveQuiz()">
+    <div class="box" >
       <div class="top">
         <a href="/" class="cancel" style="font-size:1.25rem">Cancel</a>
         <span style="font-size:1.5rem">Create Quiz</span>
-        <button class="save empty-btn" type="submit" style="font-size:1.25rem">Save</button>
+        <button class="save empty-btn" type="submit" style="font-size:1.25rem" @click="saveQuiz()">Save</button>
       </div>
       <div class="mid">
         <p>Title</p>
@@ -23,7 +23,7 @@
         placeholder="Add Due Date"
         type="text" 
         onfocus="(this.type='datetime-local')"
-        :min="quiz.createdDate"
+        :min="min"
         :max="max"
         required
         @change="checkTime"
@@ -56,8 +56,8 @@
       
       <truefale v-if="truefale" @getClick="truefale=false" @questoinSent="saveQuestion"></truefale>
       <multiple v-if="multiple" @getClick="multiple=false" @questoinSent="saveQuestion"></multiple>
-    </form>
-
+    </div>
+    <pop-up v-if="popUp" v-on:getClick="goHome" :text = message></pop-up>
   </div>
 </template>
 <script>
@@ -67,35 +67,67 @@ import questionBox from '../question/questionBox'
 import multiple from '../question/mutipleChioce.vue'
 import truefale from '../question/trueFales.vue'
 import axios from 'axios'
-// import router from '../../router/router'
+import router from '../../router/router'
+import PopUp from '../popUp.vue'
 export default {
-  // props:["userID"],
+  
   mounted() {
     const id = window.location.pathname.split('/')[2].split('%22')[1]
     this.quiz.creater = id
+
+    const oldQuiz = JSON.parse(localStorage.getItem('quiz'))
+    if(oldQuiz!=null){
+      const oldQuestion = oldQuiz.questions
+      for(let i =0 ; i<oldQuestion.length ; i++){
+        delete oldQuestion[i]._id;
+        oldQuestion[i].id = i+1
+      }
+      this.quiz.questions = oldQuestion
+      this.createdDate = oldQuiz.createdDate
+      this.quiz.title = oldQuiz.title
+      this.quiz.dueDate = new Date(`${oldQuiz.dueDate}`)
+      this.quiz.creater = oldQuiz.creater
+      this.quiz.description = oldQuiz.description
+    }
+    
+
+    // this.quiz.editQuiz = true
+    // this.quiz.quizID = oldQuiz._id
+    // this.quiz = oldQuiz
   },
   data() {
     const current = new Date();
     const currentDate = current.getFullYear() +'-'+ this.addZero(current.getMonth()+1) +'-'+ this.addZero(current.getDate());
     const maxDate = current.getFullYear()+1 +'-'+ this.addZero(current.getMonth()+1)  +'-'+ this.addZero(current.getDate());
-    const time = this.addZero(current.getHours()) + ":" + this.addZero(current.getMinutes());
-
-    const dateTime = currentDate +'T'+ time;
-    const maxdateTime = maxDate+'T'+time;
     
+
+    const time = this.addZero(current.getHours()) + ":" + this.addZero(current.getMinutes());
+    const mintime = this.addZero(current.getHours()+1) + ":" + this.addZero(current.getMinutes());
+
+    let dateTime = currentDate +'T'+ time+":"+this.addZero(current.getSeconds());
+    const maxdateTime = maxDate+'T'+time;
+    const mindateTime = currentDate +'T' +mintime;
+    const oldQuiz = JSON.parse(localStorage.getItem('quiz'))
+    if(oldQuiz!=null){
+      dateTime = oldQuiz.createdDate
+    }
     return {
       questionBoard:"",
       multiple:"",
       truefale:"",
       max: maxdateTime,
       error:'',
+      min:mindateTime,
+      popUp:'',
+      message:'',
+      saveError:'',
       quiz:{
         questions:[],
         dueDate: '',
         createdDate: dateTime,
         title:'',
         description:'',
-        creater:''     
+        creater:'',
       }
       
     }
@@ -107,6 +139,7 @@ export default {
     questionBox,
     multiple,
     truefale,
+    PopUp
   },
   methods: {
     saveQuiz(){
@@ -121,23 +154,31 @@ export default {
           quiz : this.quiz,
         })
         .then( (result) => {
-          console.log(result)
-          // if(result.data.errorEmail){
-          //   this.errorEmail = result.data.errorEmail
-          //   this.popUp = true;
-          //   this.message = "sign Up fail !!";
-          // }
+          console.log(result.data.error)
+          if(result.data.error){
+            this.saveError = true
+            this.popUp = true;
+            this.message = "save failed !!";
+          }
             
-          // else if(!result.data.errorEmail){
-          //   this.popUp = true;
-          //   this.errorEmail = false;
-          //   this.message = "successfully sign Up !!";
-          // }
+          else if(!result.data.error){
+
+            this.popUp = true;
+            this.saveError = false;
+            this.message = "successfully save !!";
+          }
         },(error) => {
           console.log(error);
         })
       }
       
+    },
+    goHome(){
+      if(!this.saveError){
+        router.push({name:"homepage"})
+      }else{
+        this.popUp = false
+      }
     },
     CheckType(value){
       this.questionBoard=false
@@ -166,13 +207,17 @@ export default {
 
       //change question id after delete element
       for(let i =0;i<questions.length;i++){
-
         questions[i].id = i+1
       }
     },
     editQuestion(value){
-      const question = this.quiz.questions.find(question => question.id == value.id)
-      console.log(question)
+      let  question = this.quiz.questions
+      for(let i=0;i <question.length;i++){
+        if(question[i].id == value.id){
+          question[i] = value
+          break
+        }
+      }
     }
   },
   computed:{
@@ -276,7 +321,7 @@ export default {
     display: none;
   }
   input:not(:placeholder-shown):invalid+span:after {
-    content: 'Dua date is empty or smaller than current date ✖';
+    content: 'Dua date is empty or smaller than 1 hour ✖';
     color: red;
     font-size: 0.95rem;
     padding-left: 5px;

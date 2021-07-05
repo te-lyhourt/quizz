@@ -27,7 +27,13 @@ const routes = [
         path:'/createquiz/:id',
         name:'createquiz',
         component: createquiz,
-        props: true
+        props:true
+    },
+    {
+        path:'/editQuiz/:id/:data',
+        name:'editQuiz',
+        component: createquiz,
+        props:true
     },
     {
         path:'/takequiz',

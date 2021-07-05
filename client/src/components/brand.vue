@@ -1,6 +1,6 @@
 <template v-html="html">
     <div class="container">
-        <a class="brand" href="Home page.html">
+        <a class="brand" href="/">
           Quizz!
           <i class="fas fa-pen"></i>
         </a>

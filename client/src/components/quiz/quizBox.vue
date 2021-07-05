@@ -1,11 +1,11 @@
 <template v-html="html">
   <div col-lg-3 col-md-12>
-    <a href="#" class="text">
+    <a @click="goCreateQuiz" class="text">
       <div class="card box-container ">
         <img class="card-img-top" src="../../assets/brand.png" alt="" />
         <div class="card-body">
-          <h5 class=".card-title">Quiz Name</h5>
-          <h5 >date</h5>
+          <h5 class=".card-title">{{quiz.title}}</h5>
+          <h5 >due: {{deadline}}</h5>
           
         </div>
       </div>
@@ -13,7 +13,40 @@
   </div>
 </template>
 <script>
-export default {};
+import router from '../../router/router'
+export default {
+  props:["quiz","userID"],
+  mounted() {
+    this.duedate()
+  },
+  data() {
+    return {
+      deadline:'',
+    }
+  },
+  methods: {
+    duedate(){
+      var current = new Date()
+      var duedate = new Date(`${this.quiz.dueDate}`)
+      var deadline = duedate-current/(3600*24*1000)
+      if(deadline==1){
+        this.deadline = "tommorow"
+      }
+      else if(deadline<0){
+        this.deadline = "already expired"
+      }
+      else if(deadline>1){
+        this.deadline =  duedate.getDate() + "-" +(duedate.getMonth()+1) + "-" + duedate.getFullYear();
+      }
+    },
+
+    goCreateQuiz(){
+      console.log(this.quiz)
+      localStorage.setItem('quiz',JSON.stringify(this.quiz));
+      router.push({path:`/createquiz/${this.userID}`})
+    },
+  },
+};
 </script>
 <style scoped>
 .card{

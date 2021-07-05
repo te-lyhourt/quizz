@@ -4,16 +4,39 @@ const Schema = mongoose.Schema;
 
 const quizSchema = new Schema({
   
-  questions:[{
-    question: String,
-    choice1: String,
-    choice2:String,
-    choice3:String,
-    choice4:String,
-    answer:String,
-    type:String,
-    id:String
-  }],
+  questions:[
+    {
+      question:{
+        type:String,
+        required:true
+      },
+      choice1:{
+        type: String,
+      },
+      choice2:{
+        type:String,
+      },
+      choice3:{ 
+        type: String,
+
+      },
+      choice4:{ 
+        type: String,
+      },
+      answer:{ 
+        type: Number,
+        required:true
+      },
+      type:{ 
+        type: String,
+        required:true
+      },
+      id: { 
+        type: Number,
+        required:true
+      },
+    }
+  ],
   dueDate:{
     type: Date,
     require:true

@@ -14,4 +14,6 @@ router.post('/sigUpAdmin',userController.createAmine)
 
 router.post('/addQuiz',quizController.createQuiz)
 
+
+
 module.exports = router;

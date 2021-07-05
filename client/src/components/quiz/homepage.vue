@@ -14,11 +14,7 @@
             <button class="btn btn-dark button-text createQuiz" @click="goCreateQuiz()" >Create quiz</button>
           
           <div class="quiz row">
-            <quiz-box></quiz-box>
-            <quiz-box></quiz-box>
-            <quiz-box></quiz-box>
-            <quiz-box></quiz-box>
-            <quiz-box></quiz-box>
+            <quiz-box v-for="quiz in quizlist" :key="quiz._id" :quiz="quiz" :userID="userID"></quiz-box>
           </div>
         </div>
 
@@ -48,7 +44,8 @@ export default {
       logIn:'',
       userName:'',
       userID:'',
-      userType:''
+      userType:'',
+      quizlist:'',
     }
   },
   async mounted() {
@@ -69,14 +66,20 @@ export default {
         this.userName = user.userName;
         this.userID = user.userID;
         this.userType = user.userType;
+        if(response.data.quizs){
+          const quizlist = response.data.quizlist
+          console.log(quizlist)
+          this.quizlist = quizlist
+        }
       }
       else{
         this.logIn = false;
       }
     },
+
     goCreateQuiz(){
       if(this.logIn){
-        
+        localStorage.removeItem('quiz')
         router.push({path:`/createquiz/${this.userID}`})
       }
       else{

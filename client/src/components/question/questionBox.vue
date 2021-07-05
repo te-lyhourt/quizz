@@ -31,7 +31,7 @@ import multiple from '../question/mutipleChioce.vue'
 
 export default {
     props:["question"],
-     components:{
+    components:{
         multiple,
         truefale,
     },

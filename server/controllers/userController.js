@@ -1,6 +1,8 @@
 const modul = require('../models/user');
 const bcrypt = require("bcryptjs");
 const User = modul.user;
+const quizModul = require('../models/quiz');
+const Quizs = quizModul.quizs;
 
 exports.createUser = (req,res)=>{
     const name = req.body.userName;
@@ -181,7 +183,6 @@ const getAppCookies = (req) => {
         return parsedCookies;
     }
     else return {}
-
     
 };
 
@@ -199,16 +200,26 @@ exports.loginCheck = (req,res)=>{
         login = true
     }
     
-    
     if(login) {
         const user = cookie;
   
-        return res.json({login,user})
+        //try to get quiz
+        Quizs.find().sort({ _id: -1 }).then(quizs=>{
+            if(Object.keys(quizs).length === 0) {
+                return res.json({login,user,quizs:false})
+            }else{
+                return res.json({login,user,quizs:true,quizlist:quizs})
+            }
+        }
+        ).catch(e=>{
+            console.log(e)
+        })
     }
     else return res.json({login})
     
 }
- exports.logOut= (req,res)=>{
+
+exports.logOut= (req,res)=>{
     res.clearCookie('username');
     res.clearCookie('userID');
     res.clearCookie('userType');

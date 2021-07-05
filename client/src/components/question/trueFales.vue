@@ -109,8 +109,8 @@ export default {
         
         const question = {
           question : this.question,
-          choice1:true,
-          choice2:false,
+          choice1:'true',
+          choice2:'false',
           answer:this.answer,
           type: this.type,
           id:''
