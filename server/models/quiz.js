@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const { nanoid } = require('nanoid')
+var ObjectId = require('mongodb').ObjectID;
 
 const quizSchema = new Schema({
-  
+  pin: {
+    type: String,
+    default: () =>  nanoid(11)
+  },
   questions:[
     {
       question:{

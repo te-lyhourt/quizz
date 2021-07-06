@@ -9,12 +9,23 @@
         <div class="right" v-if="logIn">
           
             <span class="title">
-                My Quizes
+                My Quizes 
             </span>
             <button class="btn btn-dark button-text createQuiz" @click="goCreateQuiz()" >Create quiz</button>
-          
-          <div class="quiz row">
-            <quiz-box v-for="quiz in quizlist" :key="quiz._id" :quiz="quiz" :userID="userID"></quiz-box>
+           
+          <div class="quiz row" v-if="quizs">
+            <quiz-box  v-for="quiz in quizlist" :key="quiz._id" :quiz="quiz" :userID="userID" 
+            @deleteQuiz="deleteQuiz"
+            @getPINCode = "getPINCode"
+            >
+            </quiz-box>
+            
+          </div>
+          <div class="no-quiz-text" v-else>
+            
+            <p>There is no quiz created yet.</p>
+
+            <p>create some quiz</p>
           </div>
         </div>
 
@@ -27,8 +38,10 @@
           <a href="/signUp" class="btn-link"><button class="btn btn-dark button-text welcom-btn" >SignUp</button></a>
           
         </div>
+        
 
       </div>
+      <pop-up v-if="popUp" v-on:getClick="goHome" :text = message></pop-up>
   </div>
 </template>
 <script>
@@ -37,7 +50,7 @@ import Sidebar from '../sidebar.vue';
 import axios from 'axios'
 import QuizBox from './quizBox.vue';
 import router from '../../router/router'
-
+import PopUp from '../popUp.vue' 
 export default {
   data() {
     return {
@@ -46,6 +59,9 @@ export default {
       userID:'',
       userType:'',
       quizlist:'',
+      quizs:false,
+      popUp:false,
+      message:''
     }
   },
   async mounted() {
@@ -54,6 +70,16 @@ export default {
 
   },
   methods: {
+    async deleteQuiz(value){
+      const response = await axios.get(`http://localhost:8080/homepage/deletequiz/${value}`)
+      if(response.data.delete){
+        this.popUp = true;
+        this.message = "successfull delete !!";
+      }else{
+        this.popUp = true;
+        this.message = "successfull failed !!";
+      }
+    },
     //check if user is already log in
     async checkUser(){
       const response = await axios.get('http://localhost:8080/homepage')
@@ -67,6 +93,7 @@ export default {
         this.userID = user.userID;
         this.userType = user.userType;
         if(response.data.quizs){
+          this.quizs = true
           const quizlist = response.data.quizlist
           console.log(quizlist)
           this.quizlist = quizlist
@@ -86,18 +113,30 @@ export default {
         router.push({name:"logIn"})
       }
     },
+    getPINCode(value){
+      this.popUp = true
+      this.message = 'you PIN code is: ' +value
+    },
+    goHome(){
+      location.reload();
+    },
 
   },
   components: {
     QuizBox,
     Sidebar,
     Navbar,
+    PopUp
   },
 
 };
 </script>
 <style scoped>
-
+.no-quiz-text{
+  margin-top: 50px;
+  font-size: 3vmin;
+  margin-left: 30px;
+}
 .title{
   font-size: 2rem;
   margin-left: 30px;
@@ -166,7 +205,9 @@ export default {
   display: block;
 }
 @media only screen and (max-width: 992px){
-
+  .no-quiz-text{
+    font-size: 3vmax;
+  }
   .title{
     display: inline-block;
   }

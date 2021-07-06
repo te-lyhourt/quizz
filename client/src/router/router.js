@@ -51,6 +51,7 @@ const routes = [
         component: endQuiz
     },
 
+
 ]
 
 const router = createRouter({

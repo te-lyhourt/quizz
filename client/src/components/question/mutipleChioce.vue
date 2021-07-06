@@ -487,12 +487,15 @@ input:checked + .slider:before {
   border: none;
   font-size: 1.5rem;
 }
-
-@media (max-width: 490px) {
-
-  .answerCol{
-    width: 100px;
-    font-size: 16px;
+@media (max-width: 700px) {
+  .row{
+    flex-wrap:nowrap
+  }
+  input:checked + .slider:before{
+    -webkit-transform: translateX(10px);
+    -ms-transform: translateX(10px);
+    transform: translateX(10px);
   }
 }
+
 </style>

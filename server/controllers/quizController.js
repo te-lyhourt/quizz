@@ -6,9 +6,6 @@ const userController = require('../controllers/userController');
 
 const User = userModul.user;
 
-
-
-
 exports.createQuiz = (req,res)=>{
     const quiz = req.body.quiz
     console.log(quiz)
@@ -77,5 +74,23 @@ exports.updateUser = (quizID,data)=>{
         console.log("not error")
     }).catch(e=>{
         console.log(e)
+    })
+}
+
+exports.deleteQuiz = (req,res)=>{
+    const quizID = req.params.quizID;
+
+    Quizs.deleteOne({"_id":ObjectId(quizID)})
+        .then(() => {
+            console.log('Post is deleted'); 
+
+        })
+        .catch(err => {
+          console.log(err);
+    }).then(result=>{
+        return res.json({delete:true})
+    }).catch(e=>{
+        console.log(e)
+        return res.json({delete:false})
     })
 }

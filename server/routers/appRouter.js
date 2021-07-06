@@ -14,6 +14,6 @@ router.post('/sigUpAdmin',userController.createAmine)
 
 router.post('/addQuiz',quizController.createQuiz)
 
-
+router.get('/homepage/deletequiz/:quizID', quizController.deleteQuiz); 
 
 module.exports = router;

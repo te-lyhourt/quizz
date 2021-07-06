@@ -202,9 +202,9 @@ exports.loginCheck = (req,res)=>{
     
     if(login) {
         const user = cookie;
-  
+
         //try to get quiz
-        Quizs.find().sort({ _id: -1 }).then(quizs=>{
+        Quizs.find({creater: cookie.userID.split('%22')[1]}).sort({ _id: -1 }).then(quizs=>{
             if(Object.keys(quizs).length === 0) {
                 return res.json({login,user,quizs:false})
             }else{

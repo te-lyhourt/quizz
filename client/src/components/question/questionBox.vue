@@ -44,11 +44,10 @@ export default {
     },
     methods: {
         deleteQuestion(){
-            let respone = confirm("do you really want to delete question : " + this.question.question)
+            let respone = confirm("Do you really want to delete question : " + this.question.question)
             if(respone){
                 this.$emit("deleteQuestion",this.question.id)
             }
-            
         },
         editQuestion(){
             const type =  this.question.type

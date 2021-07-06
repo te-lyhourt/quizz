@@ -387,5 +387,8 @@ input:checked + .slider:before {
     width: 100px;
     font-size: 16px;
   }
+  .row{
+    flex-wrap:nowrap
+  }
 }
 </style>

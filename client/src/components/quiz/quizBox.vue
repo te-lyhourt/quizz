@@ -1,15 +1,25 @@
 <template v-html="html">
-  <div col-lg-3 col-md-12>
-    <a @click="goCreateQuiz" class="text">
+  <div col-lg-3 col-md-12 class="text">
+    
       <div class="card box-container ">
-        <img class="card-img-top" src="../../assets/brand.png" alt="" />
-        <div class="card-body">
-          <h5 class=".card-title">{{quiz.title}}</h5>
-          <h5 >due: {{deadline}}</h5>
-          
+        <a @click="goCreateQuiz" >
+          <img class="card-img-top" src="../../assets/brand.png" alt="" />
+          <div class="card-body">
+            <h5 class=".card-title">{{quiz.title}}</h5>
+            <h5 >due: {{deadline}}</h5>
+          </div>
+        </a>
+        <div class="botton-btn">
+          <button class="btn btn-dark button-text delete" @click="deleteQuestion">
+            delete 
+          </button>
+          <button class="btn btn-dark button-text getlink" @click="getcode">
+            get code
+          </button>
         </div>
       </div>
-    </a>
+    
+    
   </div>
 </template>
 <script>
@@ -25,12 +35,27 @@ export default {
     }
   },
   methods: {
+    deleteQuestion(){
+      let respone = confirm("Do you really want to delete quiz : " + this.quiz.title)
+      if(respone){
+        this.$emit("deleteQuiz",this.quiz._id)
+      }
+    },
+    getcode(){
+      let respone = confirm("Do you want to get PIN code for ur quiz : " + this.quiz.title)
+      if(respone){
+        this.$emit("getPINCode",this.quiz.pin)
+      }
+    },
     duedate(){
       var current = new Date()
       var duedate = new Date(`${this.quiz.dueDate}`)
       var deadline = duedate-current/(3600*24*1000)
       if(deadline==1){
         this.deadline = "tommorow"
+      }
+      else if(deadline==0){
+        this.deadline = "due today"
       }
       else if(deadline<0){
         this.deadline = "already expired"
@@ -90,5 +115,18 @@ export default {
 }
 .text:hover{
   color: white;
+}
+.botton-btn{
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.delete:hover{
+  background: linear-gradient(32deg, rgba(238,29,29,1) 0%,
+        rgba(224,11,11,1)100%);
+}
+.getlink:hover{
+  background: linear-gradient(32deg, rgba(11,223,36) 0%,
+        rgba(41,232,111)100%);
 }
 </style>
