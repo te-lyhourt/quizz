@@ -6,12 +6,17 @@ import createquiz from '../components/quiz/createQuizes.vue'
 import taskQuzi from '../components/takeQuiz/quizPage.vue'
 import startQuiz from '../components/takeQuiz/startQuiz.vue'
 import endQuiz from '../components/takeQuiz/endQuiz.vue'
-
+import quizpage from '../components/quiz/quizpage.vue'
 const routes = [
     {
         path:'/',
         name:'homepage',
         component: homepage
+    },
+    {
+        path:'/quizpage/:id',
+        name:'quizpage',
+        component:quizpage
     },
     {
         path:'/logIn',

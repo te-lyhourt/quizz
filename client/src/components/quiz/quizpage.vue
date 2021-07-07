@@ -1,17 +1,17 @@
 <template v-html="html">
   <div class="box">
-      <navbar :login="logIn" ></navbar>
+      <navbar  :login="logIn" ></navbar>
       <div class="content">
         <div class="left">
-          <sidebar v-if="logIn" :location="location" :userID="userID"></sidebar>
+          <sidebar v-if="logIn" :location="location"></sidebar>
         </div>
         
         <div class="right" v-if="logIn">
           
             <span class="title">
-                My Quizes 
+                Quizes finished 
             </span>
-            <button class="btn btn-dark button-text createQuiz" @click="goCreateQuiz()" >Create quiz</button>
+            <button class="btn btn-dark button-text createQuiz" @click="joinQuiz()" >Join quiz</button>
            
           <div class="quiz row" v-if="quizs">
             <quiz-box  v-for="quiz in quizlist" :key="quiz._id" :quiz="quiz" :userID="userID" 
@@ -23,25 +23,15 @@
           </div>
           <div class="no-quiz-text" v-else>
             
-            <p>There is no quiz created yet.</p>
+            <p>You not yet attend any quiz yet</p>
 
-            <p>create some quiz</p>
+            <p>join quiz</p>
           </div>
         </div>
 
-        <div class="right" style="text-align: center;" v-else>
-          <h1 class="welcome">
-            Welcome To Quizz! <i class="fas fa-pen "></i>
-          </h1>
-          <p class="welcome-text">logIn or signUp to continue</p>
-          <a href="/logIn" class="btn-link"><button class="btn btn-dark button-text welcom-btn" >LogIn</button></a>
-          <a href="/signUp" class="btn-link"><button class="btn btn-dark button-text welcom-btn" >SignUp</button></a>
-          
-        </div>
-        
-
       </div>
-      <pop-up v-if="popUp" v-on:getClick="goHome" :text = message></pop-up>
+      <pop-up v-if="popUp" @getClick="goHome" :text = message></pop-up>
+      <addpin v-if="join" @getClick="goHome"></addpin>
   </div>
 </template>
 <script>
@@ -49,26 +39,27 @@ import Navbar from '../navbar.vue';
 import Sidebar from '../sidebar.vue';
 import axios from 'axios'
 import QuizBox from './quizBox.vue';
-import router from '../../router/router'
-import PopUp from '../popUp.vue' 
+// import router from '../../router/router'
+import PopUp from '../popUp.vue'
+import addpin from './addpin.vue'
 export default {
   data() {
     return {
-      logIn:'',
+      logIn:true,
       userName:'',
       userID:'',
       userType:'',
       quizlist:'',
       quizs:false,
       popUp:false,
+      join:false,
       message:'',
-      location:"homepage"
+      location:"quizpage"
     }
   },
-  async mounted() {
-    // alert("get call")
-    this.checkUser();
-
+  mounted() {
+    const id = window.location.pathname.split('/')[2].split('%22')[1]
+    this.userID = id
   },
   methods: {
     async deleteQuiz(value){
@@ -81,38 +72,10 @@ export default {
         this.message = "successfull failed !!";
       }
     },
-    //check if user is already log in
-    async checkUser(){
-      const response = await axios.get('http://localhost:8080/homepage')
-     
-      if(response.data.login){
-        this.logIn = true;
 
-        const user = response.data.user;
-        // console.log(user)
-        this.userName = user.userName;
-        this.userID = user.userID;
-        this.userType = user.userType;
-        if(response.data.quizs){
-          this.quizs = true
-          const quizlist = response.data.quizlist
-          // console.log(quizlist)
-          this.quizlist = quizlist
-        }
-      }
-      else{
-        this.logIn = false;
-      }
-    },
-
-    goCreateQuiz(){
-      if(this.logIn){
-        localStorage.removeItem('quiz')
-        router.push({path:`/createquiz/${this.userID}`})
-      }
-      else{
-        router.push({name:"logIn"})
-      }
+    joinQuiz(){
+      //popUp let user fill quiz pin
+      this.join = true
     },
     getPINCode(value){
       this.popUp = true
@@ -127,7 +90,8 @@ export default {
     QuizBox,
     Sidebar,
     Navbar,
-    PopUp
+    PopUp,
+    addpin
   },
 
 };
@@ -188,23 +152,8 @@ export default {
 .fa-pen{
   font-size: 9vmin;
 }
-.welcome{
-  margin-top: 6%;
-  font-size: 11vmin;
-}
-.welcome-text{
-  margin: 3% 0;
-  font-size: 4.5vmin;
-}
-.btn.welcom-btn{
-  font-size: 5vmin;
-  width: 220px;
-  
-  margin: 20px auto;
-}
-.btn-link{
-  display: block;
-}
+
+
 @media only screen and (max-width: 992px){
   .no-quiz-text{
     font-size: 3vmax;
@@ -228,10 +177,7 @@ export default {
   .quiz.row{
     margin: 15px 60px 0 60px;
   }
-  .welcom-btn{
-    width: 75%;
-    margin-top: 20px;
-  }
+
   .createQuiz{
     width: 75%;
     margin-right: 0;

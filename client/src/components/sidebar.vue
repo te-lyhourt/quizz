@@ -3,7 +3,7 @@
       <ul class="nav_list">
           
         <li>
-          <a href="#">
+          <a @click="goHome()" class="homepage">
             <i class='bx bxs-message-rounded-add'></i>
             <span class="links_name">Create quiz</span>
           </a>
@@ -11,7 +11,7 @@
         </li>
 
         <li>
-          <a href="#">
+          <a @click="takeQuiz()" class="quizpage">
            <i class='bx bxs-message-rounded-edit'></i>
             <span class="links_name">Take quiz</span>
           </a>
@@ -22,18 +22,33 @@
     </div>
 </template>
 <script>
-
+import router from '../router/router'
 export default {
-    components:{
-
+  el:".sidebar",
+  props:["location","userID"],
+  components:{
+  
+  },
+  mounted() {
+    if(this.location!=undefined){
+      if(this.location=="homepage") this.$el.querySelector(".homepage").classList.add("active");
+      else if(this.location=="quizpage") this.$el.querySelector(".quizpage").classList.add("active");
+    }
+  },
+  methods: {
+    goHome(){
+      router.push({name:"homepage"})
     },
+    takeQuiz(){
+      router.push({path:`/quizpage/${this.userID}`})
 
+    }
+  },
 };
 </script>
 <style scoped>
 
-/* Google Font CDN Link */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -123,6 +138,10 @@ export default {
   transition: all 0.4s ease;
 }
 .sidebar ul li a:hover {
+  color: #11101d;
+  background: #fff;
+}
+.sidebar ul li a.active{
   color: #11101d;
   background: #fff;
 }
