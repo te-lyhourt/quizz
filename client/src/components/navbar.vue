@@ -34,7 +34,7 @@ export default {
       
       if(result.data.logout){
         //relaod home page after log out
-        location.reload();
+        location.replace("/");
       }
       
       

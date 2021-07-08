@@ -6,10 +6,11 @@
         </div>
         
         <div class="bottom">
-          <h4>Please fill in PIN code of quiz:</h4>
+          <h4 class="text">Please fill in PIN code of quiz:</h4>
           <input type="text" v-model="pin" class="addPIN" maxlength="12">
-          <p class="error" v-if="noQuestion">{{error}}</p>
-          <button @click="getClick" class="btn btn-dark button-text">Ok</button>
+          <p class="error" v-if="wrongPIN">{{errorMessage}}</p>
+          <p class="error right" v-if="rightPIN">join quiz successfully</p>
+          <button @click="sendPIN" class="btn btn-dark button-text">Ok</button>
         </div>
     </div>
 
@@ -17,12 +18,17 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
+    props:["quizlist","userID"],
     data(){
         return{
             isActive: true,
             pin:'',
             wrongPIN:false,
+            rightPIN:false,
+            errorMessage:''
         }
         
     },
@@ -31,13 +37,46 @@ export default {
         getClick(){
           this.isActive = false;
           this.$emit('getClick')
-        }
+        },
+        sendPIN(){
+          this.errorMessage = ''
+          this.wrongPIN = false
+          if(this.pin.length>11 || this.pin.length<11){
+            this.wrongPIN = true
+            this.errorMessage = "PIN is invalid "
+          }
+          else if(this.pin.length===11){
+            const quizlist = this.quizlist
+            //find quiz in list
+
+            for(let i =0 ; i < quizlist.length ; i++) {
+              if(quizlist[i].pin === this.pin){
+                this.errorMessage = "Quiz is already in the list"
+                this.wrongPIN = true
+                break
+              }
+            }
+            //not found 
+            this.getQuiz()
+          }
+        },
+        async getQuiz(){
+          this.join=false
+          const getQuiz = await axios.get('http://localhost:8080/'+this.userID+'/getQuizByPIN/'+this.pin)
+          console.log(getQuiz)
+          if(getQuiz.data.found){
+            this.rightPIN = true
+            setTimeout(function(){
+                location.reload()
+            }, 5000);
+            
+          }
+          else{
+            this.wrongPIN = true
+            this.errorMessage = getQuiz.data.errorMessage
+          }
+        },
     },
-    computed:{
-        pinlength(){
-            if(pin.length>11) this.wrongPIN = true
-        }
-    }
 };
 </script>
 <style scoped>
@@ -106,8 +145,30 @@ export default {
 }
 .addPIN{
     width: 60%;
-    margin: 0 auto;
+    margin: 10px auto 0;
     border: solid black ;
     border-radius: 3px;
+}
+.text{
+  font-size: 3.75vmin;
+  margin: 20px 0 ;
+}
+.error{
+  color: red;
+  margin-top: 20px;
+  font-size: 2.7vmin;
+}
+.right{
+  color: green;
+
+}
+@media screen and (max-width: 600px) {
+    .error {
+      font-size: 4vmin;
+    }
+    .text{
+      font-size: 5vmin;
+      margin: 20px 0 ;
+    }
 }
 </style>

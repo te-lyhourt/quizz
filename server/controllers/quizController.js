@@ -94,3 +94,64 @@ exports.deleteQuiz = (req,res)=>{
         return res.json({delete:false})
     })
 }
+
+exports.getQuizByPIN = (req,res)=>{
+    const quizPIN = req.params.quizPIN;
+    const userID = req.params.userID;
+
+    //check if user exist
+    User.find({_id:ObjectId(userID)}).then(user=>{
+        if(Object.keys(user).length !== 0) {
+
+            //check if quiz exist if exist update
+            filters = {pin:quizPIN}
+            //start update
+            update = {
+                $push:{
+                    participant:{
+                        name: user[0].name,
+                        _id:ObjectId(userID),
+                        joinDate: new Date(),
+                        status:"join"
+                    }
+                }
+                
+            }
+            Quizs.findOneAndUpdate(filters,update).then(result=>{
+                
+                if(result == null){
+                    console.log("send null")
+                    return res.json({found:false,errorMessage:"quiz not found"})
+                } 
+                else if(Object.keys(result).length !== 0) {
+                    return res.json({found:true})
+                }
+            }).catch(e=>{
+                console.log(e)
+            })
+        }
+        else return res.json({found:false,errorMessage:"User Not found"})
+    })
+
+    
+}
+
+
+
+
+exports.loadQuizpage=(req,res)=>{
+    const userID = req.params.userID;
+    Quizs.find(
+        { participant:{  $elemMatch: {_id : userID} } } 
+    ).then(result=>{
+
+        if(Object.keys(result).length === 0) {
+            return res.json({quizs:false}) 
+        }else{
+            // console.log(result)
+            return res.json({quizs:true,quizlist:result}) 
+        }
+    })
+}
+
+

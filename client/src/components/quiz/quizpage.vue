@@ -11,7 +11,7 @@
             <span class="title">
                 Quizes finished 
             </span>
-            <button class="btn btn-dark button-text createQuiz" @click="joinQuiz()" >Join quiz</button>
+            <button class="btn btn-dark button-text createQuiz" @click="join = true" >Join quiz</button>
            
           <div class="quiz row" v-if="quizs">
             <quiz-box  v-for="quiz in quizlist" :key="quiz._id" :quiz="quiz" :userID="userID" 
@@ -31,7 +31,7 @@
 
       </div>
       <pop-up v-if="popUp" @getClick="goHome" :text = message></pop-up>
-      <addpin v-if="join" @getClick="goHome"></addpin>
+      <addpin v-if="join" @getClick="goHome" :quizlist = quizlist :userID="userID"></addpin>
   </div>
 </template>
 <script>
@@ -60,8 +60,18 @@ export default {
   mounted() {
     const id = window.location.pathname.split('/')[2].split('%22')[1]
     this.userID = id
+    this.getQuiz()
   },
   methods: {
+    async getQuiz(){
+      const response = await axios.get('http://localhost:8080/quizpage/'+this.userID)
+      console.log(response)
+      if(response.data.quizs){
+        this.quizs =true
+        this.quizlist = response.data.quizlist
+      }
+    },
+
     async deleteQuiz(value){
       const response = await axios.get(`http://localhost:8080/homepage/deletequiz/${value}`)
       if(response.data.delete){
@@ -72,11 +82,7 @@ export default {
         this.message = "successfull failed !!";
       }
     },
-
-    joinQuiz(){
-      //popUp let user fill quiz pin
-      this.join = true
-    },
+    
     getPINCode(value){
       this.popUp = true
       this.message = 'you PIN code is: ' +value
