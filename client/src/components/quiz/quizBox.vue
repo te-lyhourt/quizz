@@ -1,16 +1,17 @@
 <template v-html="html">
-  <div col-lg-3 col-md-12 class="text">
+
+  <div col-lg-3 col-md-12 id="text">
     
       <div class="card box-container ">
         <a @click="goCreateQuiz" >
           <img class="card-img-top" src="../../assets/brand.png" alt="" />
           <div class="card-body">
             <h5 class=".card-title">{{quiz.title}}</h5>
-            <h5 >due: {{deadline}}</h5>
+            <h5 class="deadline" :class="{ red: late }" >due: {{deadline}}</h5>
           </div>
         </a>
         <div class="botton-btn">
-          <button class="btn btn-dark button-text delete" @click="deleteQuestion">
+          <button class="btn btn-dark button-text delete" @click="deleteQuestion" v-if="Delete">
             delete 
           </button>
           <button class="btn btn-dark button-text getlink" @click="getcode">
@@ -18,23 +19,27 @@
           </button>
         </div>
       </div>
-    
-    
   </div>
+
 </template>
 <script>
 import router from '../../router/router'
 export default {
-  props:["quiz","userID"],
+
+  props:["quiz","userID","location"],
   mounted() {
-    this.duedate()
+    this.duedate();
+    this.disableDelete()
   },
   data() {
     return {
       deadline:'',
+      late:false,
+      Delete:true
     }
   },
   methods: {
+
     deleteQuestion(){
       let respone = confirm("Do you really want to delete quiz : " + this.quiz.title)
       if(respone){
@@ -50,30 +55,49 @@ export default {
     duedate(){
       var current = new Date()
       var duedate = new Date(`${this.quiz.dueDate}`)
-      var deadline = duedate-current/(3600*24*1000)
+      var deadline = (duedate - current)/(3600*24*1000)
+
       if(deadline==1){
         this.deadline = "tommorow"
       }
-      else if(deadline==0){
+      else if(Math.floor(deadline)==0){
         this.deadline = "due today"
+        
       }
       else if(deadline<0){
+        this.late = true
         this.deadline = "already expired"
       }
       else if(deadline>1){
         this.deadline =  duedate.getDate() + "-" +(duedate.getMonth()+1) + "-" + duedate.getFullYear();
       }
     },
-
+    disableDelete(){
+      
+      if(this.location == "quizpage"){
+        console.log(this.location == "quizpage")
+        this.Delete = false
+      }
+    },
     goCreateQuiz(){
-      console.log(this.quiz)
-      localStorage.setItem('quiz',JSON.stringify(this.quiz));
-      router.push({path:`/createquiz/${this.userID}`})
+
+      if(this.location=="homepage"){
+        localStorage.setItem('quiz', JSON.stringify(this.quiz));
+        router.push({path:`/quizdetail/${this.quiz._id}`})
+      }
+      // if(this.location=="quizpage"){
+        
+      // }
+      
+      
     },
   },
 };
 </script>
 <style scoped>
+.red{
+  color: red;
+}
 .card{
   background-color: transparent ;
 }
@@ -109,17 +133,21 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.text{
+#text{
   text-decoration: none;
   color: white;
 }
-.text:hover{
+#text:hover{
   color: white;
 }
 .botton-btn{
   margin: 10px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  
+}
+.button-text{
+  margin: 10px 0 0;
 }
 .delete:hover{
   background: linear-gradient(32deg, rgba(238,29,29,1) 0%,

@@ -14,7 +14,7 @@
             <button class="btn btn-dark button-text createQuiz" @click="join = true" >Join quiz</button>
            
           <div class="quiz row" v-if="quizs">
-            <quiz-box  v-for="quiz in quizlist" :key="quiz._id" :quiz="quiz" :userID="userID" 
+            <quiz-box  v-for="quiz in quizlist" :key="quiz._id" :quiz="quiz" :userID="userID" :location="location"
             @deleteQuiz="deleteQuiz"
             @getPINCode = "getPINCode"
             >

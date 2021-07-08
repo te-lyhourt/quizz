@@ -9,8 +9,8 @@
           <h4 class="text">Please fill in PIN code of quiz:</h4>
           <input type="text" v-model="pin" class="addPIN" maxlength="12">
           <p class="error" v-if="wrongPIN">{{errorMessage}}</p>
-          <p class="error right" v-if="rightPIN">join quiz successfully</p>
-          <button @click="sendPIN" class="btn btn-dark button-text">Ok</button>
+          <p class="error right" v-if="rightPIN">join quiz successfully,reload page...</p>
+          <button @click="sendPIN" class="btn btn-dark button-text" :disabled= disable >Ok</button>
         </div>
     </div>
 
@@ -28,7 +28,8 @@ export default {
             pin:'',
             wrongPIN:false,
             rightPIN:false,
-            errorMessage:''
+            errorMessage:'',
+            disable:false
         }
         
     },
@@ -57,10 +58,11 @@ export default {
               }
             }
             //not found 
-            this.getQuiz()
+            if(!this.wrongPIN) this.getQuiz()
           }
         },
         async getQuiz(){
+          this.disable = true
           this.join=false
           const getQuiz = await axios.get('http://localhost:8080/'+this.userID+'/getQuizByPIN/'+this.pin)
           console.log(getQuiz)
@@ -68,7 +70,7 @@ export default {
             this.rightPIN = true
             setTimeout(function(){
                 location.reload()
-            }, 5000);
+            }, 2000);
             
           }
           else{

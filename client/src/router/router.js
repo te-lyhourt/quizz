@@ -7,6 +7,7 @@ import taskQuzi from '../components/takeQuiz/quizPage.vue'
 import startQuiz from '../components/takeQuiz/startQuiz.vue'
 import endQuiz from '../components/takeQuiz/endQuiz.vue'
 import quizpage from '../components/quiz/quizpage.vue'
+import quizdetail from '../components/quiz/quizdetail.vue'
 const routes = [
     {
         path:'/',
@@ -17,6 +18,11 @@ const routes = [
         path:'/quizpage/:id',
         name:'quizpage',
         component:quizpage
+    },
+    {
+        path:'/quizdetail/:quizID',
+        name:'quizdetail',
+        component:quizdetail
     },
     {
         path:'/logIn',
