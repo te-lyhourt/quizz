@@ -4,10 +4,9 @@
         <div class="box">
             
             <h1>Are you aready?</h1>
-            <h2 id="end-text" >Enter Your name below to save your score !</h2>
+            <h2 id="end-text" ></h2>
             <from class="end-form-container" >
-                <input type="text" name="name" id="username" class="username" placeholder=" Enter your name" v-model="userName">
-                <button class=" btn btn-dark start-btn" id="saveScoreBtn" @click="startQuiz()" :disabled="userName===''">
+                <button class=" btn btn-dark start-btn" id="saveScoreBtn" @click="startQuiz()" >
                     Start !
                 </button>
             </from>
@@ -17,16 +16,26 @@
     </div>
 </template>
 <script>
-// import brand from '../brand.vue'
 
+import router from '../../router/router'
 export default {
     mounted() {
         document.title = "Start Quiz";
+        const quizID = window.location.pathname.split('/')[2]
+        const userID = window.location.pathname.split('/')[3]
+        this.userID = userID
+        this.quizID = quizID
     },
-    // components: { brand },
     data() {
         return {
-            userName:''
+            quizID:'',
+            userID:'',
+        }
+    },
+    methods: {
+
+        startQuiz(){
+            router.push({path:`/takequiz/${this.quizID}/${this.userID}`})
         }
     },
 }

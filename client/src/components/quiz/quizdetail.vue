@@ -7,20 +7,21 @@
         <div class="top" >
           
             <span class="title">
-                Quiz title:  
+                Quiz title:  {{quiz.title}}
             </span>
             <button class="btn btn-dark button-text createQuiz" @click="goCreateQuiz()" >edit quiz</button>
-            <p class="description">{{quiz.title}}</p>
+            
         </div>
         <div class="middle">
             <span class="title">Description: </span>
             <p class="description">{{quiz.description}}</p>
         </div>
         <div class="bottom">
-            <span class="title">Practicipian: </span>
+            <span class="title">participant: </span>
             <div >
-
-                <usertable></usertable>
+              
+              <usertable v-if="noPaticipian"></usertable>
+              <p class="description" v-else  > No one join the quiz yet</p>
             </div>
         </div>
 
@@ -34,17 +35,18 @@ import usertable from '../user/usertbale.vue'
 export default {
     components: { 
       usertable,
-
     },
     mounted() {
-        const oldQuiz = JSON.parse(localStorage.getItem('quiz'))
-        if(oldQuiz!=null){
-          this.quiz = oldQuiz
-        }
+      const oldQuiz = JSON.parse(localStorage.getItem('quiz'))
+      if(oldQuiz!=null){
+        this.quiz = oldQuiz
+        this.participant = this.quiz.participant
+      }
     },
     data() {
         return {
           quiz:'',
+          participant:'',
         }
     },
     methods: {
@@ -55,6 +57,14 @@ export default {
             router.push({path:'/'})
         }
     },
+    computed:{
+      noPaticipian(){
+        
+        if(this.participant.length>0) return true
+        else return false
+
+      }
+    }
 }
 </script>
 <style scoped>
@@ -110,28 +120,29 @@ export default {
 .description{
   margin: 30px 0 50px;
   margin-left: 120px;
-  font-size: 3vmin;
+  font-size: 2.5vmin;
     
 }
-
+.middle{
+  margin-top: 30px;
+}
 @media only screen and (max-width: 992px){
-
-  .title{
-    display: inline-block;
-  }
-  .top{
+  .top , .middle ,.bottom{
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+  .title{
+    display: inline-block;
+  }
+
   .createQuiz{
     width: 75%;
     margin-right: 0;
   }
   .description{
-    margin: 25px 0 50px;
-    font-size: 4vmin;
-    margin-left: 120px;
+    font-size: 3vmin;
+    margin-left: 30px;
   }
 }  
 </style>

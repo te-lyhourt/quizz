@@ -47,14 +47,14 @@ const routes = [
         props:true
     },
     {
-        path:'/takequiz',
-        name:'takequiz',
-        component: taskQuzi
-    },
-    {
-        path:'/startquiz',
+        path:'/startquiz/:quizID/:userID',
         name:'startquiz',
         component : startQuiz
+    },
+    {
+        path:'/takequiz/:quizID/:userID',
+        name:'takequiz',
+        component: taskQuzi
     },
     {
         path:'/endquiz',

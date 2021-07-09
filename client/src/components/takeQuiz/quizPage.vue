@@ -4,7 +4,7 @@
             <div id="hud">
                 <div class="hud-item">
                     <p id="progressText" ref="progressText" class="hud-prefix">
-                        Question {{questionCounter}} of {{maxQuestion}}
+                        Question {{questionCounter-1}} of {{maxQuestion}}
                     </p>
                     <div id="progressBar">
                         <div id="progressBarFull" ref="progressBarFull">
@@ -42,14 +42,27 @@
     </div>
 </template>
 <script>
-
-
+import axios from 'axios';
 
 import router from '../../router/router'
 export default {
     el : '#game',
+    mounted() {
+        document.title = "Quiz Page";
+        
+        
+        document.title = "Start Quiz";
+        const quizID = window.location.pathname.split('/')[2]
+        const userID = window.location.pathname.split('/')[3]
+        this.userID = userID
+        this.quizID = quizID
+        this.startGame()
+        
+    },
     data() {
         return {
+            quizID:'',
+            userID:'',
             currentQuestion : {},
             acceptingAnswer : true,
             score : 0,
@@ -57,96 +70,107 @@ export default {
             availableQuestion : [],
             maxQuestion: '',
             questions : [
-                {
-                    question : 'human can fly',
-                    choice1 : 'true',
-                    choice2 : 'false',
-                    // choice3 : '17',
-                    // choice4 : '21',
-                    answer :2,
-                },
-                {
-                    question : 'what is 2 + 4 ?',
-                    choice1 : '22',
-                    choice2 : '',
-                    choice3 : '6',
-                    choice4 : '21',
-                    answer :3,
-                },
-                {
-                    question : 'what is 100% - 4% ?',
-                    choice1 : '2aa',
-                    choice2 : '96%',
-                    choice3 : 'aaa',
-                    choice4 : '21',
-                    answer :2,
-                },  
-                {
-                    question : 'what is 23 + 2 ?',
-                    choice1 : '2',
-                    choice2 : '25',
-                    choice3 : '17',
-                    choice4 : '21',
-                    answer :2,
-                },
-                {
-                    question : 'what is 23 + 2 ?',
-                    choice1 : '2',
-                    choice2 : '25',
-                    choice3 : '17',
-                    choice4 : '21',
-                    answer :2,
-                },
-                {
-                    question : 'what is 23 + 2 ?',
-                    choice1 : '2',
-                    choice2 : '25',
-                    choice3 : '17',
-                    choice4 : '21',
-                    answer :2,
-                },
+                // {
+                //     question : 'human can fly',
+                //     choice1 : 'true',
+                //     choice2 : 'false',
+                //     // choice3 : '17',
+                //     // choice4 : '21',
+                //     answer :2,
+                // },
+                // {
+                //     question : 'what is 2 + 4 ?',
+                //     choice1 : '22',
+                //     choice2 : '',
+                //     choice3 : '6',
+                //     choice4 : '21',
+                //     answer :3,
+                // },
+                // {
+                //     question : 'what is 100% - 4% ?',
+                //     choice1 : '2aa',
+                //     choice2 : '96%',
+                //     choice3 : 'aaa',
+                //     choice4 : '21',
+                //     answer :2,
+                // },  
+                // {
+                //     question : 'what is 23 + 2 ?',
+                //     choice1 : '2',
+                //     choice2 : '25',
+                //     choice3 : '17',
+                //     choice4 : '21',
+                //     answer :2,
+                // },
+                // {
+                //     question : 'what is 23 + 2 ?',
+                //     choice1 : '2',
+                //     choice2 : '25',
+                //     choice3 : '17',
+                //     choice4 : '21',
+                //     answer :2,
+                // },
+                // {
+                //     question : 'what is 23 + 2 ?',
+                //     choice1 : '2',
+                //     choice2 : '25',
+                //     choice3 : '17',
+                //     choice4 : '21',
+                //     answer :2,
+                // },
 
             ]
         }
     },
-    mounted() {
-        document.title = "Quiz Page";
-        this.maxQuestion = this.questions.length
-        this.startGame()
-    },
+
     methods: {
-        startGame() {
-            this.questionCounter = 0
-            this.score = 0
-            this.availableQuestion = [...this.questions]
-            this.getNewQuestion()
+        async startGame(){
+
+            const getQuiz = await axios.get('http://localhost:8080/getquiz/'+this.quizID)
+
+            if(getQuiz.data.found){
+                const quiz =  getQuiz.data.quiz
+                this.questions = quiz[0].questions;
+                this.maxQuestion = this.questions.length
+                this.questionCounter = 1
+                this.score = 0
+                this.availableQuestion = [...this.questions]
+                this.getNewQuestion()
+            }
+
         },
+
         getNewQuestion () {
             const MAX_QUESTION = this.maxQuestion
 
             if(this.availableQuestion.length === 0 || this.questionCounter > MAX_QUESTION){
                 localStorage.setItem('mostRecentScore',this.score);
-
-                router.push({ name:"endquiz"})
+                axios.post('http://localhost:8080/saveResult/'+this.quizID/+this.userID,{
+                    score: this.score
+                })
+                // router.push({ name:"endquiz"})
             }
-            this.questionCounter++
+            else{
+                this.questionCounter++
 
-            this.$refs.progressBarFull.style.width = (this.questionCounter/MAX_QUESTION)*100 + "%" 
+                this.$refs.progressBarFull.style.width = (this.questionCounter/MAX_QUESTION)*100 + "%" 
 
-            const questionIndex = Math.floor(Math.random() * this.availableQuestion.length)
-            this.currentQuestion = this.availableQuestion[questionIndex]
+                const questionIndex = Math.floor(Math.random() * this.availableQuestion.length)
+                this.currentQuestion = this.availableQuestion[questionIndex]
+                
+                this.$refs.question.innerText = this.currentQuestion.question
+                const choices = Array.from(this.$el.querySelectorAll('.choice-text'));
+                choices.forEach(choice =>{
+                    const number = choice.dataset['number']
+                    choice.innerText = this.currentQuestion['choice'+number]
+                    if(choice.innerText==='undefined' || choice.innerText==='') choice.parentElement.style.display = 'none'
+                    else choice.parentElement.style.display = 'flex'
+                })
+
+                this.availableQuestion.splice(questionIndex,1)
+                this.acceptingAnswer = true
+            }
             
-            this.$refs.question.innerText = this.currentQuestion.question
-            const choices = Array.from(this.$el.querySelectorAll('.choice-text'));
-            choices.forEach(choice =>{
-                const number = choice.dataset['number']
-                choice.innerText = this.currentQuestion['choice'+number]
-                if(choice.innerText==='undefined' || choice.innerText==='') choice.parentElement.style.display = 'none'
-                else choice.parentElement.style.display = 'flex'
-            })
-
-            this.availableQuestion.splice(questionIndex,1)
-            this.acceptingAnswer = true
         },
         incrementScore(num){
             this.score +=num

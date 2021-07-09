@@ -132,11 +132,7 @@ exports.getQuizByPIN = (req,res)=>{
         }
         else return res.json({found:false,errorMessage:"User Not found"})
     })
-
-    
 }
-
-
 
 
 exports.loadQuizpage=(req,res)=>{
@@ -154,4 +150,42 @@ exports.loadQuizpage=(req,res)=>{
     })
 }
 
+exports.getQuiz = (req,res)=>{
 
+    console.log("get quiz")
+    const quizID = req.params.quizID;
+    filters = {_id: ObjectId(quizID)}
+    Quizs.find(filters).then(result=>{
+                
+        if(result == null){
+            console.log("send null")
+            return res.json({found:false,errorMessage:"quiz not found"})
+        } 
+        else if(Object.keys(result).length !== 0) {
+            console.log("send quiz")
+            return res.json({found:true,quiz:result})
+        }
+    }).catch(e=>{
+        console.log(e)
+    })
+}
+
+exports.saveResult = (req,res)=>{
+    console.log(req)
+    // const quizID = req.params.quizID;
+    // const userID = req.params.userID;
+    
+    // Quizs.findOneAndUpdate(filters,update).then(result=>{
+                
+    //     if(result == null){
+    //         console.log("send null")
+    //         return res.json({found:false,errorMessage:"quiz not found"})
+    //     } 
+    //     else if(Object.keys(result).length !== 0) {
+    //         return res.json({found:true})
+    //     }
+    // }).catch(e=>{
+    //     console.log(e)
+    // })
+
+}

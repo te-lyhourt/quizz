@@ -75,20 +75,18 @@ export default {
     disableDelete(){
       
       if(this.location == "quizpage"){
-        console.log(this.location == "quizpage")
         this.Delete = false
       }
     },
     goCreateQuiz(){
-
+      
       if(this.location=="homepage"){
         localStorage.setItem('quiz', JSON.stringify(this.quiz));
         router.push({path:`/quizdetail/${this.quiz._id}`})
       }
-      // if(this.location=="quizpage"){
-        
-      // }
-      
+      if(this.location=="quizpage"){
+        router.push({path:`/startquiz/${this.quiz._id}/${this.userID}`})
+      }
       
     },
   },

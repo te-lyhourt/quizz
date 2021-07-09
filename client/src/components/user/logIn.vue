@@ -63,7 +63,11 @@ export default {
             })
             .then( (result) => {
                 if(result.data.passwordIsMatch){
-
+                    const logIN = {
+                      value: true,
+                      expiry: new Date().getTime() + (86400 * 1000),
+                    }
+                    localStorage.setItem("logIN", JSON.stringify(logIN))
                     this.popUp = true;
                     this.notFound = false;
                     this.message = "successfully log In !!";

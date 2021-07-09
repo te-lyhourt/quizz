@@ -21,5 +21,8 @@ router.get('/quizpage/:userID',quizController.loadQuizpage)
 
 router.get('/:userID/getQuizByPIN/:quizPIN',quizController.getQuizByPIN)
 
+router.get('/getquiz/:quizID',quizController.getQuiz)
+
+router.post('/saveResult/:quizID/:userID',quizController.saveResult)
 
 module.exports = router;

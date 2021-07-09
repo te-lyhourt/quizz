@@ -109,12 +109,12 @@ export default {
 
 
     table {
-        width: 90%;
-        border-collapse: collapse;
-        margin: 20px 0px 10px  50px;
-        border-radius: 5px;
-        border-style: hidden; /* hide standard table (collapsed) border */
-        box-shadow: 0 0 0 3px black; /* this draws the table border  */ 
+      width: 90%;
+      border-collapse: collapse;
+      margin: 20px 0px 10px  50px;
+      border-radius: 5px;
+      border-style: hidden; /* hide standard table (collapsed) border */
+      box-shadow: 0 0 0 3px black; /* this draws the table border  */ 
     }
 
 
@@ -167,7 +167,7 @@ export default {
         border-right: none;
     }
     table tbody tr:nth-child(2n) td {
-        background: #D4D8F9;
+        background: #1F1F1F;
     }
 
     .pagination {
@@ -205,5 +205,10 @@ export default {
     .number:hover, .number.active {
         background:black;
         border-radius: 6px;
+    }
+    @media only screen and (max-width: 992px){
+      table{
+        width: 75%;
+      }
     }
 </style>

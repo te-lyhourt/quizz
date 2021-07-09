@@ -64,6 +64,7 @@ export default {
   },
   methods: {
     async getQuiz(){
+      localStorage.removeItem("quiz")
       const response = await axios.get('http://localhost:8080/quizpage/'+this.userID)
       console.log(response)
       if(response.data.quizs){

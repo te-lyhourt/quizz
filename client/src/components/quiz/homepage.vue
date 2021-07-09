@@ -82,13 +82,32 @@ export default {
         this.message = "successfull failed !!";
       }
     },
+    getWithExpiry() {
+      const itemStr = localStorage.getItem("logIN")
+      // if the item doesn't exist, return null
+      if (!itemStr) {
+        return null
+      }
+      const item = JSON.parse(itemStr)
+      const now = new Date()
+      // compare the expiry time of the item with the current time
+      if (now.getTime() > item.expiry) {
+        // If the item is expired, delete the item from storage
+        // and return null
+        localStorage.removeItem("logIN")
+        return null
+      }
+      return item.value
+    },
     //check if user is already log in
     async checkUser(){
+      //check logIN
+      const LogIN = this.getWithExpiry()
+      if(LogIN) this.logIn = true
+      //get data
       const response = await axios.get('http://localhost:8080/homepage')
      
       if(response.data.login){
-        this.logIn = true;
-
         const user = response.data.user;
         // console.log(user)
         this.userName = user.userName;
