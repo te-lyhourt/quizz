@@ -7,14 +7,15 @@
           <img class="card-img-top" src="../../assets/brand.png" alt="" />
           <div class="card-body">
             <h5 class=".card-title">{{quiz.title}}</h5>
-            <h5 class="deadline" :class="{ red: late }" >due: {{deadline}}</h5>
+            <h5 class="deadline" :class="{ red: late ,green : finish }" > {{deadline}}</h5>
+            
           </div>
         </a>
         <div class="botton-btn">
           <button class="btn btn-dark button-text delete" @click="deleteQuestion" v-if="Delete">
             delete 
           </button>
-          <button class="btn btn-dark button-text getlink" @click="getcode">
+          <button class="btn btn-dark button-text getlink" @click="getcode" v-if="Getcode">
             get code
           </button>
         </div>
@@ -29,13 +30,17 @@ export default {
   props:["quiz","userID","location"],
   mounted() {
     this.duedate();
-    this.disableDelete()
+    this.disableDelete();
+    localStorage.removeItem("mostRecentScore")
+    
   },
   data() {
     return {
+      finish:false,
       deadline:'',
       late:false,
-      Delete:true
+      Delete:true,
+      Getcode:true
     }
   },
   methods: {
@@ -56,27 +61,45 @@ export default {
       var current = new Date()
       var duedate = new Date(`${this.quiz.dueDate}`)
       var deadline = (duedate - current)/(3600*24*1000)
-
-      if(deadline==1){
-        this.deadline = "tommorow"
+      if(this.checkFinish()){
+        this.finish = true
+        this.deadline = "finished"
+      } 
+      else if(deadline==1){
+        this.deadline = "due: tommorow"
       }
       else if(Math.floor(deadline)==0){
-        this.deadline = "due today"
+        this.deadline = "due: today"
         
       }
       else if(deadline<0){
         this.late = true
-        this.deadline = "already expired"
+        this.deadline = "expired"
       }
       else if(deadline>1){
-        this.deadline =  duedate.getDate() + "-" +(duedate.getMonth()+1) + "-" + duedate.getFullYear();
+        const month = duedate.toLocaleString('default', { month: 'short' })
+        this.deadline = "due: "+ month + "/" + duedate.getDate()  + " "+duedate.getHours()+":"+duedate.getMinutes();
       }
     },
     disableDelete(){
       
       if(this.location == "quizpage"){
         this.Delete = false
+        if(this.deadline=="expired") this.Getcode = false
       }
+    },
+    checkFinish(){
+      //check if user alreay finished quiz
+      const participant = this.quiz.participant
+      const length = participant.length
+       false
+      for(let i = 0 ; i<length;i++){
+        if(participant[i]._id==this.userID && participant[i].status == "finished"){
+          localStorage.setItem("mostRecentScore",participant[i].score)
+          return true
+        } 
+      }
+      return false
     },
     goCreateQuiz(){
       
@@ -85,7 +108,16 @@ export default {
         router.push({path:`/quizdetail/${this.quiz._id}`})
       }
       if(this.location=="quizpage"){
-        router.push({path:`/startquiz/${this.quiz._id}/${this.userID}`})
+        const found = this.checkFinish()
+        
+        if(found){
+          router.push({path:`/endquiz`})
+        } 
+        else{
+          //check if quiz is already expired
+          if(this.deadline=="expired") router.push({path:`/latequiz/${this.quiz._id}/${this.userID}`})
+          else router.push({path:`/startquiz/${this.quiz._id}/${this.userID}`})
+        }  
       }
       
     },
@@ -95,6 +127,11 @@ export default {
 <style scoped>
 .red{
   color: red;
+  text-shadow: none;
+}
+.green{
+  color:green;
+  text-shadow:none;
 }
 .card{
   background-color: transparent ;

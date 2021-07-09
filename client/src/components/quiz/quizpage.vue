@@ -66,7 +66,6 @@ export default {
     async getQuiz(){
       localStorage.removeItem("quiz")
       const response = await axios.get('http://localhost:8080/quizpage/'+this.userID)
-      console.log(response)
       if(response.data.quizs){
         this.quizs =true
         this.quizlist = response.data.quizlist

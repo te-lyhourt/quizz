@@ -18,17 +18,15 @@
 export default {
     props:['text'],
     data(){
-        return{
-            isActive: true
-        }
-        
+      return{
+        isActive: true
+      }
     },
     methods: {
-
-        getClick(){
-          this.isActive = false;
-          this.$emit('getClick')
-        }
+      getClick(){
+        this.isActive = false;
+        this.$emit('getClick')
+      }
     },
 };
 </script>

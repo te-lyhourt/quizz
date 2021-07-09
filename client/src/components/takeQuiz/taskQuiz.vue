@@ -1,52 +1,59 @@
 <template v-html="html">
-    <div class="box">
-        <div id="game" class="flex-colum justify-center">
-            <div id="hud">
-                <div class="hud-item">
-                    <p id="progressText" ref="progressText" class="hud-prefix">
-                        Question {{questionCounter-1}} of {{maxQuestion}}
-                    </p>
-                    <div id="progressBar">
-                        <div id="progressBarFull" ref="progressBarFull">
+    <div>
+        <div class="box">
+            <div id="game" class="flex-colum justify-center">
+                <div id="hud">
+                    <div class="hud-item">
+                        <p id="progressText" ref="progressText" class="hud-prefix">
+                            Question {{questionCounter-1}} of {{maxQuestion}}
+                        </p>
+                        <div id="progressBar">
+                            <div id="progressBarFull" ref="progressBarFull">
 
+                            </div>
                         </div>
                     </div>
+                    <div class="hub-item">
+                        <p class="hud-prefix">
+                            Score
+                        </p>
+                        <h1 class="hud-main-text" id="score" ref="score">
+                            0
+                        </h1>
+                    </div>
                 </div>
-                <div class="hub-item">
-                    <p class="hud-prefix">
-                        Score
-                    </p>
-                    <h1 class="hud-main-text" id="score" ref="score">
-                        0
-                    </h1>
+                <h4 id="question" ref="question">What is the answer of this question</h4>
+                <div class="choice-container"  >
+                    <p class="choice-prefix">A</p>
+                    <p class="choice-text" data-number="1" ref="choices" @click="choices($event)">Choice</p>
                 </div>
-            </div>
-            <h4 id="question" ref="question">What is the answer of this question</h4>
-            <div class="choice-container"  >
-                <p class="choice-prefix">A</p>
-                <p class="choice-text" data-number="1" ref="choices" @click="choices($event)">Choice</p>
-            </div>
-            <div class="choice-container" >
-                <p class="choice-prefix">B</p>
-                <p class="choice-text" data-number="2" ref="choices" @click="choices($event)">Choice 2</p>
-            </div>
-            <div class="choice-container"  >
-                <p class="choice-prefix">C</p>
-                <p class="choice-text" data-number="3" ref="choices" @click="choices($event)">Choice 3</p>
-            </div>
-            <div class="choice-container"  >
-                <p class="choice-prefix">D</p>
-                <p class="choice-text" data-number="4" ref="choices" @click="choices($event)">Choice 4</p>
+                <div class="choice-container" >
+                    <p class="choice-prefix">B</p>
+                    <p class="choice-text" data-number="2" ref="choices" @click="choices($event)">Choice 2</p>
+                </div>
+                <div class="choice-container"  >
+                    <p class="choice-prefix">C</p>
+                    <p class="choice-text" data-number="3" ref="choices" @click="choices($event)">Choice 3</p>
+                </div>
+                <div class="choice-container"  >
+                    <p class="choice-prefix">D</p>
+                    <p class="choice-text" data-number="4" ref="choices" @click="choices($event)">Choice 4</p>
+                </div>
             </div>
         </div>
+        <pop-up v-if="popUp" @getClick="goHome" :text = message></pop-up>
     </div>
+
 </template>
 <script>
 import axios from 'axios';
 
-import router from '../../router/router'
+import popUp from '../popUp.vue';
+
 export default {
+    components: { popUp },
     el : '#game',
+
     mounted() {
         document.title = "Quiz Page";
         
@@ -61,6 +68,8 @@ export default {
     },
     data() {
         return {
+            popUp:false,
+            message:'',
             quizID:'',
             userID:'',
             currentQuestion : {},
@@ -69,57 +78,6 @@ export default {
             questionCounter : 0,
             availableQuestion : [],
             maxQuestion: '',
-            questions : [
-                // {
-                //     question : 'human can fly',
-                //     choice1 : 'true',
-                //     choice2 : 'false',
-                //     // choice3 : '17',
-                //     // choice4 : '21',
-                //     answer :2,
-                // },
-                // {
-                //     question : 'what is 2 + 4 ?',
-                //     choice1 : '22',
-                //     choice2 : '',
-                //     choice3 : '6',
-                //     choice4 : '21',
-                //     answer :3,
-                // },
-                // {
-                //     question : 'what is 100% - 4% ?',
-                //     choice1 : '2aa',
-                //     choice2 : '96%',
-                //     choice3 : 'aaa',
-                //     choice4 : '21',
-                //     answer :2,
-                // },  
-                // {
-                //     question : 'what is 23 + 2 ?',
-                //     choice1 : '2',
-                //     choice2 : '25',
-                //     choice3 : '17',
-                //     choice4 : '21',
-                //     answer :2,
-                // },
-                // {
-                //     question : 'what is 23 + 2 ?',
-                //     choice1 : '2',
-                //     choice2 : '25',
-                //     choice3 : '17',
-                //     choice4 : '21',
-                //     answer :2,
-                // },
-                // {
-                //     question : 'what is 23 + 2 ?',
-                //     choice1 : '2',
-                //     choice2 : '25',
-                //     choice3 : '17',
-                //     choice4 : '21',
-                //     answer :2,
-                // },
-
-            ]
         }
     },
 
@@ -130,11 +88,10 @@ export default {
 
             if(getQuiz.data.found){
                 const quiz =  getQuiz.data.quiz
-                this.questions = quiz[0].questions;
-                this.maxQuestion = this.questions.length
+                this.availableQuestion = quiz[0].questions;
+                this.maxQuestion = this.availableQuestion.length
                 this.questionCounter = 1
                 this.score = 0
-                this.availableQuestion = [...this.questions]
                 this.getNewQuestion()
             }
 
@@ -145,15 +102,21 @@ export default {
 
             if(this.availableQuestion.length === 0 || this.questionCounter > MAX_QUESTION){
                 localStorage.setItem('mostRecentScore',this.score);
-                axios.post('http://localhost:8080/saveResult/'+this.quizID/+this.userID,{
+                axios.post('http://localhost:8080/saveResult/'+this.quizID+'/'+this.userID,{
                     score: this.score
+                }).then(result=>{
+                    console.log(result.data)
+                    if(result.data.save){
+                        this.popUp =true
+                        this.message = "Thank You!      Your score is: " + this.score
+                    }
                 })
-                // router.push({ name:"endquiz"})
+
             }
             else{
                 this.questionCounter++
 
-                this.$refs.progressBarFull.style.width = (this.questionCounter/MAX_QUESTION)*100 + "%" 
+                this.$refs.progressBarFull.style.width = ((this.questionCounter-1)/MAX_QUESTION)*100 + "%" 
 
                 const questionIndex = Math.floor(Math.random() * this.availableQuestion.length)
                 this.currentQuestion = this.availableQuestion[questionIndex]
@@ -198,7 +161,10 @@ export default {
                 selectedChoice.parentElement.classList.remove(classToApply)
                 this.getNewQuestion()
             },1000)
-        }
+        },
+        goHome(){
+            location.replace("http://localhost:8080/")
+        },
         
     },
 }

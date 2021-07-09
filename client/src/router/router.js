@@ -3,11 +3,12 @@ import signUp from '@/components/user/signUp.vue'
 import logIn from '@/components/user/logIn.vue'
 import homepage from '../components/quiz/homepage.vue'
 import createquiz from '../components/quiz/createQuizes.vue'
-import taskQuzi from '../components/takeQuiz/quizPage.vue'
+import taskQuiz from '../components/takeQuiz/taskQuiz.vue'
 import startQuiz from '../components/takeQuiz/startQuiz.vue'
 import endQuiz from '../components/takeQuiz/endQuiz.vue'
 import quizpage from '../components/quiz/quizpage.vue'
 import quizdetail from '../components/quiz/quizdetail.vue'
+import latequiz from '../components/takeQuiz/lateQuiz.vue'
 const routes = [
     {
         path:'/',
@@ -54,14 +55,18 @@ const routes = [
     {
         path:'/takequiz/:quizID/:userID',
         name:'takequiz',
-        component: taskQuzi
+        component: taskQuiz
     },
     {
         path:'/endquiz',
         name:'endquiz',
         component: endQuiz
     },
-
+    {
+        path:'/latequiz/:quizID/:userID',
+        name:'latequiz',
+        component: latequiz
+    }
 
 ]
 

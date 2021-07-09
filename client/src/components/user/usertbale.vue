@@ -36,14 +36,22 @@ export default {
           const people = oldQuiz.participant
           for(let i = 0 ; i<people.length;i++){
             let score = 0
-            if(people[i].score!=undefined) score = people[i].score
-               rows.push(
-                   {
-                    No: i+1 , 
-                    name: people[i].name,
-                    status : people[i].status,
-                    score : score
-                   }
+            let finishAt = "none"
+            if(people[i].score!=undefined){
+              score = people[i].score
+              var duedate = new Date(people[i].finishDate)
+              const month = duedate.toLocaleString('default', { month: 'short' })
+              finishAt =  month + "/" + duedate.getDate()  + " "+duedate.getHours()+":"+duedate.getMinutes();
+            } 
+
+            rows.push(
+              {
+                No: i+1 , 
+                name: people[i].name,
+                status : people[i].status,
+                score : score,
+                finishAt : finishAt
+              }      
             )
           }
           this.rows = rows

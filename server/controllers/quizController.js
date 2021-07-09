@@ -171,7 +171,28 @@ exports.getQuiz = (req,res)=>{
 }
 
 exports.saveResult = (req,res)=>{
-    console.log(req)
+    console.log("save result call")
+    const score = req.body.score
+    console.log(score)
+    const userID = req.params.userID;
+    const quizID = req.params.quizID;
+    filters = {_id: ObjectId(quizID),'participant._id' : ObjectId(userID)}
+    update = {
+        $set : {
+            "participant.$.score" : score,
+            "participant.$.status" : "finished",
+            "participant.$.finishDate" : new Date(),
+
+        }
+    }
+    Quizs.updateOne(filters,update).then(result=>{
+        return res.json({save:true})
+    }).catch(e=>{
+        console.log(e)
+        return res.json({save:false})
+    })
+
+
     // const quizID = req.params.quizID;
     // const userID = req.params.userID;
     

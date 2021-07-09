@@ -18,9 +18,9 @@
         </div>
         <div class="bottom">
             <span class="title">participant: </span>
+            <p class=" description right"  v-if="havePaticipian" > total participant: {{total}} </p>
             <div >
-              
-              <usertable v-if="noPaticipian"></usertable>
+              <usertable v-if="havePaticipian"></usertable>
               <p class="description" v-else  > No one join the quiz yet</p>
             </div>
         </div>
@@ -41,12 +41,14 @@ export default {
       if(oldQuiz!=null){
         this.quiz = oldQuiz
         this.participant = this.quiz.participant
+        this.total = this.participant.length
       }
     },
     data() {
         return {
           quiz:'',
           participant:'',
+          total:'',
         }
     },
     methods: {
@@ -58,7 +60,7 @@ export default {
         }
     },
     computed:{
-      noPaticipian(){
+      havePaticipian(){
         
         if(this.participant.length>0) return true
         else return false
@@ -86,7 +88,6 @@ export default {
 }
 .box {
     margin: 60px auto ;
-    
     width: 75%;
     padding: 30px 70px;
     background-color: #353535;
@@ -114,14 +115,18 @@ export default {
 }
 .createQuiz{
   float: right;
-  margin-right: 10px;
+  margin-right: 50px;
 }
 
 .description{
-  margin: 30px 0 50px;
+  margin: 30px 0 50px ;
   margin-left: 120px;
   font-size: 2.5vmin;
     
+}
+.right{
+  float:right;
+  margin-right: 50px;
 }
 .middle{
   margin-top: 30px;
@@ -144,5 +149,9 @@ export default {
     font-size: 3vmin;
     margin-left: 30px;
   }
+  .right{
+    float: none;
+    margin-right: 0;
+  };
 }  
 </style>

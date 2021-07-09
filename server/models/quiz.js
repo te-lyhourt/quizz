@@ -59,7 +59,7 @@ const quizSchema = new Schema({
   //who take quiz
   participant:[{
     name: String,
-    quizDate:{
+    finishDate:{
       type: Date,
       require:true
     },
@@ -68,7 +68,7 @@ const quizSchema = new Schema({
       require:true
     },
     score:{
-      type:Date,
+      type:String,
       require:true
     },
     status:{

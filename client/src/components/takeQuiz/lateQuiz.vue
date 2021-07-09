@@ -2,13 +2,7 @@
     <div>
          <div class="box">
              <div id="end">
-                <h1 style="font-size:5rem;">Thank you!</h1>
-                <h1>
-                    <br>You alreay finished the quiz, your score is:
-                </h1>
-                <h1 class="finalScore">
-                    {{score}}
-                </h1>
+                <h1 style="font-size:10vmin;">Sorry , your quiz is already expired !!!</h1>
                 <a href="/" class="btn btn-dark start-btn">Go home <i class="fas fa-home"></i></a>
              </div>
          </div>
@@ -16,20 +10,6 @@
 </template>
 <script>
 export default {
-    mounted() {
-        this.getScore()
-    },
-
-    data() {
-        return {
-            score:''
-        }
-    },
-    methods: {
-        getScore(){
-            this.score =  localStorage.getItem('mostRecentScore');
-        }
-    },
 }
 </script>
 <style scoped>
