@@ -82,10 +82,9 @@ export default {
       }
     },
     disableDelete(){
-      
+      if(this.deadline=="expired") this.Getcode = false
       if(this.location == "quizpage"){
         this.Delete = false
-        if(this.deadline=="expired") this.Getcode = false
       }
     },
     checkFinish(){
@@ -104,6 +103,7 @@ export default {
     goCreateQuiz(){
       
       if(this.location=="homepage"){
+        
         localStorage.setItem('quiz', JSON.stringify(this.quiz));
         router.push({path:`/quizdetail/${this.quiz._id}`})
       }

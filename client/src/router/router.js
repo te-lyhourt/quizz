@@ -9,6 +9,7 @@ import endQuiz from '../components/takeQuiz/endQuiz.vue'
 import quizpage from '../components/quiz/quizpage.vue'
 import quizdetail from '../components/quiz/quizdetail.vue'
 import latequiz from '../components/takeQuiz/lateQuiz.vue'
+import nofound from '../components/quiz/pageNotFound.vue'
 const routes = [
     {
         path:'/',
@@ -66,6 +67,11 @@ const routes = [
         path:'/latequiz/:quizID/:userID',
         name:'latequiz',
         component: latequiz
+    },
+    {
+        path:'/:pathMatch(.*)*',
+        name:"notfound",
+        component:nofound,
     }
 
 ]

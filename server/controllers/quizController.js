@@ -66,7 +66,8 @@ exports.updateUser = (quizID,data)=>{
         $set:{
             questions : data.questions,
             title:data.title,
-            description: data.description
+            description: data.description,
+            dueDate: new Date(data.dueDate)
         }
     }
     const options = { upsert: false };

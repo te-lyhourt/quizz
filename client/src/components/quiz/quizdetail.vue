@@ -37,6 +37,7 @@ export default {
       usertable,
     },
     mounted() {
+      document.title="quiz detail"
       const oldQuiz = JSON.parse(localStorage.getItem('quiz'))
       if(oldQuiz!=null){
         this.quiz = oldQuiz

@@ -66,7 +66,7 @@ export default {
     }
   },
   async mounted() {
-    // alert("get call")
+    document.title="Home page"
     this.checkUser();
     localStorage.removeItem('quiz')
 

@@ -58,6 +58,7 @@ export default {
     }
   },
   mounted() {
+    document.title="quiz page"
     const id = window.location.pathname.split('/')[2].split('%22')[1]
     this.userID = id
     this.getQuiz()

@@ -72,6 +72,7 @@ import PopUp from '../popUp.vue'
 export default {
   
   mounted() {
+    document.title="create quiz"
     const id = window.location.pathname.split('/')[2].split('%22')[1]
     this.quiz.creater = id
 
