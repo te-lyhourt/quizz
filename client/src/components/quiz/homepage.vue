@@ -153,6 +153,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .no-quiz-text{
   margin-top: 50px;
   font-size: 3vmin;

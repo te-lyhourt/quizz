@@ -1,36 +1,35 @@
 <template v-html="html">
-    <div>
-        <brand></brand>
+
+        
         <div class="signbox">
             <div class="top">
-            <div class="text">
-                <span class="heading">Log in</span>
-                <p class="signbox-text">Enter you email and password to continue</p>
+                    <div class="text">
+                        <span class="heading">Log in</span>
+                        <p class="signbox-text">Enter you email and password to continue</p>
+                    </div>
+            
+
+                <form @submit.prevent="logIn()">
+                    <p class="left-text">Email address</p>
+                    <div class="error">
+                        <span style="color: red;" v-if="notFound">
+                            incorrect password or email not exist!
+                        </span>
+                    </div>
+                    <input class="long-box" v-model="email" type="email" name="email" required="required" /> <br/>
+                    <p class="left-text">Password</p> 
+                    <input class="long-box"  v-model="password" type="password" name="password" pattern=".{8,}" title="password should be atleast 8 letter" required="required"/> <br/>
+                    
+                    <button class="long-box btn btn-primary" type="submit" >Sign Up</button> 
+                </form>
             </div>
         
+            <p class="sign-up">Dont have any account ? <a href="http://localhost:8080/signUp">sign up</a></p>
+            <p class="copy-right">2021 © Quizz! by Lyhourt</p>
 
-            <form @submit.prevent="logIn()">
-                <p class="left-text">Email address</p>
-                <div class="error">
-                    <span style="color: red;" v-if="notFound">
-                        incorrect password or email not exist!
-                    </span>
-                </div>
-                <input class="long-box" v-model="email" type="email" name="email" required="required" /> <br/>
-                <p class="left-text">Password</p> 
-                <input class="long-box"  v-model="password" type="password" name="password" pattern=".{8,}" title="password should be atleast 8 letter" required="required"/> <br/>
-                
-
-                <button class="long-box btn btn-primary" type="submit" >Sign Up</button> 
-            </form>
+            <pop-up v-if="popUp" v-on:getClick="goHome" :text = message></pop-up>
         </div>
-        
-        <p class="sign-up">Dont have any account ? <a href="http://localhost:8080/signUp">sign up</a></p>
-        <p class="copy-right">2021 © Quizz! by Lyhourt</p>
 
-        <pop-up v-if="popUp" v-on:getClick="goHome" :text = message></pop-up>
-    </div>
-    </div>
 </template>
 <script>
 
