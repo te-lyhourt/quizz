@@ -15,13 +15,13 @@ export default {
     .container{
         text-align: center;
         padding-top: 50px;
+        margin: 0;
     }
    .brand
     {
         font-size: 3rem;
         font-weight: 700;
         color: white;
-        margin-left: 40px;
     }
     
     .brand:hover{

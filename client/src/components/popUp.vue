@@ -62,10 +62,12 @@ export default {
   background-color: rgb(0, 0, 0, 0.5);
   pointer-events: none;
   opacity: 0;
+  
 }
 #overlay.active {
   opacity: 1;
   pointer-events: all;
+  z-index: 2!important;
 }
 .x{
   float:right;
